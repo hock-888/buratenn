@@ -57,10 +57,6 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chip.shu.on{background:var(--shu);border-color:var(--shu);}
 .chip.oth.on{background:var(--oth);border-color:var(--oth);}
 .chip.s5.on{background:var(--s5c);border-color:var(--s5c);}
-.chip.troop-s.on{background:#b91c1c;border-color:#b91c1c;color:#fff;}
-.chip.stype-start.on{background:#065f46;border-color:#065f46;color:#fff;}
-.chip.stype-active.on{background:#b45309;border-color:#b45309;color:#fff;}
-.chip.stype-passive.on{background:#1d4ed8;border-color:#1d4ed8;color:#fff;}
 .chip.s4.on{background:var(--s4c);border-color:var(--s4c);}
 .chip.s3.on{background:var(--s3c);border-color:var(--s3c);}
 
@@ -113,14 +109,12 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
 .gc-troop.trC{background:#f1f5f9;}.gc-troop.trC .gc-trank{color:#6b7280;}
 /* 兵種適性表示（ドラッグカード） */
-.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:3px;width:100%;overflow:hidden;}
-.dgc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
-.dgc-tname{color:var(--tx3);font-weight:600;font-size:6px;}
-.dgc-trank{font-weight:800;font-size:7px;}
-.dgc-troop.trS{background:#fde8e8;}.dgc-troop.trS .dgc-trank{color:#b91c1c;}
-.dgc-troop.trA{background:#fef3c7;}.dgc-troop.trA .dgc-trank{color:#b45309;}
-.dgc-troop.trB{background:#dbeafe;}.dgc-troop.trB .dgc-trank{color:#1d4ed8;}
-.dgc-troop.trC{background:#f1f5f9;}.dgc-troop.trC .dgc-trank{color:#6b7280;}
+.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px;width:100%;}
+.dgc-troop{font-size:7px;font-weight:800;padding:1px 2px;border-radius:2px;line-height:1.4;text-align:center;}
+.dgc-troop.trS{background:#fde8e8;color:#b91c1c;}
+.dgc-troop.trA{background:#fef3c7;color:#b45309;}
+.dgc-troop.trB{background:#dbeafe;color:#1d4ed8;}
+.dgc-troop.trC{background:#f1f5f9;color:#6b7280;}
 
 /* ── SKILL CARD (roster) ── */
 .scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:3px;}
@@ -471,22 +465,12 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
         <div class="dpanel" style="margin-bottom:0">
           <div class="dph">
             <span class="dpt">⚔️ 所持武将</span>
-            <div style="display:flex;flex-direction:column;gap:4px;">
-              <div class="chips" id="dchips-fac">
-                <span class="chip on" onclick="fDFac('all',this)">全て</span>
-                <span class="chip wei" onclick="fDFac('魏',this)">魏</span>
-                <span class="chip wu"  onclick="fDFac('呉',this)">呉</span>
-                <span class="chip shu" onclick="fDFac('蜀',this)">蜀</span>
-                <span class="chip oth" onclick="fDFac('他',this)">他</span>
-              </div>
-              <div class="chips" id="dchips-troop">
-                <span class="chip on" onclick="fDTroop('all',this)">全て</span>
-                <span class="chip troop-s" onclick="fDTroop('騎',this)">騎S</span>
-                <span class="chip troop-s" onclick="fDTroop('盾',this)">盾S</span>
-                <span class="chip troop-s" onclick="fDTroop('弓',this)">弓S</span>
-                <span class="chip troop-s" onclick="fDTroop('槍',this)">槍S</span>
-                <span class="chip troop-s" onclick="fDTroop('兵',this)">兵S</span>
-              </div>
+            <div class="chips" id="dchips">
+              <span class="chip on"  onclick="fD('all',this)">全て</span>
+              <span class="chip wei" onclick="fD('魏',this)">魏</span>
+              <span class="chip wu"  onclick="fD('呉',this)">呉</span>
+              <span class="chip shu" onclick="fD('蜀',this)">蜀</span>
+              <span class="chip oth" onclick="fD('他',this)">他</span>
             </div>
           </div>
           <div class="dgrid" id="dgrid"></div>
@@ -494,19 +478,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
         <div class="dpanel" style="margin-bottom:0">
           <div class="dph">
             <span class="dpt">📜 所持スキル</span>
-            <div style="display:flex;flex-direction:column;gap:4px;">
-              <div class="chips" id="sdchips-lv">
-                <span class="chip on" onclick="fSDLv('all',this)">全て</span>
-                <span class="chip s5" onclick="fSDLv('5',this)">★5</span>
-                <span class="chip s4" onclick="fSDLv('4',this)">★4</span>
-                <span class="chip s3" onclick="fSDLv('3',this)">★3</span>
-              </div>
-              <div class="chips" id="sdchips-tp">
-                <span class="chip on" onclick="fSDTp('all',this)">全て</span>
-                <span class="chip stype-start" onclick="fSDTp('start',this)">始動</span>
-                <span class="chip stype-active" onclick="fSDTp('active',this)">アクティブ</span>
-                <span class="chip stype-passive" onclick="fSDTp('passive',this)">パッシブ</span>
-              </div>
+            <div class="chips" id="sdchips">
+              <span class="chip on" onclick="fSD('all',this)">全て</span>
+              <span class="chip s5" onclick="fSD('5',this)">★5</span>
+              <span class="chip s4" onclick="fSD('4',this)">★4</span>
+              <span class="chip s3" onclick="fSD('3',this)">★3</span>
             </div>
           </div>
           <div class="dgrid" id="sdgrid"></div>
@@ -860,50 +836,50 @@ var SKILLS = [
   // ════════════════════════════════════════
   // 星5 固有スキル（スキル化不可）
   // ════════════════════════════════════════
-  {id:'敵全体に防御-140[3T]、主将時:敵全体計略-140[3T]',      n:'曹操の全体弱化策',        lv:5, tp:'start',   src:'曹操',       d:'敵全体に防御-140[3T]、主将時:敵全体計略-140[3T]'},
-  {id:'敵1体に武力450ダメ、対象が主将なら追加武力150ダメ',   n:'張遼の襲将強撃',          lv:5, tp:'active',  src:'張遼',       d:'敵1体に武力450ダメ、対象が主将なら追加武力150ダメ'},
-  {id:'通常攻撃受け後、20%麻痺+50%で武力260ダメ',   n:'夏侯惇の雷鳴反撃術',      lv:5, tp:'passive', src:'夏侯惇',     d:'通常攻撃受け後、20%麻痺+50%で武力260ダメ'},
-  {id:'武力最高の味方に武力+85、計略最高の味方に計略+85、主将時:全体防御+125[3T]',     n:'孫権の才覚強化策',        lv:5, tp:'start',   src:'孫権',       d:'武力最高の味方に武力+85、計略最高の味方に計略+85、主将時:全体防御+125[3T]'},
-  {id:'敵2体を火計状態[計略ダメ威力170/3T]',      n:'周瑜の双火計',            lv:5, tp:'active',  src:'周瑜',       d:'敵2体を火計状態[計略ダメ威力170/3T]'},
-  {id:'自分に武力+130[2T]+連撃状態[2T]',    n:'太史慈の連技',            lv:5, tp:'active',  src:'太史慈',     d:'自分に武力+130[2T]+連撃状態[2T]'},
-  {id:'全体防御+130[3T]、主将時:全体持続回復[計略×75/3T]',      n:'劉備の全体強化回復策',    lv:5, tp:'start',   src:'劉備',       d:'全体防御+130[3T]、主将時:全体持続回復[計略×75/3T]'},
-  {id:'敵全体に武力120ダメ、15%麻痺[1T]',      n:'関羽の雷鳴烈撃',          lv:5, tp:'active',  src:'関羽',       d:'敵全体に武力120ダメ、15%麻痺[1T]'},
-  {id:'全体計略+130[3T]、主将時:全体持続回復[計略×75/3T]',       n:'諸葛亮の全体強化回復策',  lv:5, tp:'start',   src:'諸葛亮',     d:'全体計略+130[3T]、主将時:全体持続回復[計略×75/3T]'},
-  {id:'武力最高の味方に武力・防御・速度+140[3T]、主将時:敵全体速度-140[3T]',     n:'董卓の豪傑強化策',        lv:5, tp:'start',   src:'董卓',       d:'武力最高の味方に武力・防御・速度+140[3T]、主将時:敵全体速度-140[3T]'},
-  {id:'ランダム敵1体に武力120ダメ×5',        n:'呂布の伍乱撃',            lv:5, tp:'active',  src:'呂布',       d:'ランダム敵1体に武力120ダメ×5'},
-  {id:'ランダム敵1体に計略120ダメ×5',     n:'張角の伍乱鬼謀',          lv:5, tp:'active',  src:'張角',       d:'ランダム敵1体に計略120ダメ×5'},
-  {id:'敵1体に武力680ダメ、デメリット:自分武力-100[3T]',      n:'楽進の渾身撃',            lv:5, tp:'active',  src:'楽進',       d:'敵1体に武力680ダメ、デメリット:自分武力-100[3T]'},
-  {id:'自分に防御・武力+120[3T]+持続回復[防御×240/3T]',      n:'曹仁の強化回復策',        lv:5, tp:'start',   src:'曹仁',       d:'自分に防御・武力+120[3T]+持続回復[防御×240/3T]'},
-  {id:'敵1体に計略-150[3T]+計略320ダメ',     n:'程昱の鬼謀',              lv:5, tp:'active',  src:'程昱',       d:'敵1体に計略-150[3T]+計略320ダメ'},
-  {id:'味方主将に武力・速度+100[3T]+持続回復[計略×240/3T]',      n:'郭嘉の主将強化回復策',    lv:5, tp:'start',   src:'郭嘉',       d:'味方主将に武力・速度+100[3T]+持続回復[計略×240/3T]'},
-  {id:'2/4/6T目に味方2体へ計略×180回復',  n:'王元姫の回復秘術',        lv:5, tp:'passive', src:'王元姫',     d:'2/4/6T目に味方2体へ計略×180回復'},
-  {id:'敵2体に武力210ダメ+挑発[1T]',        n:'許褚の挑発双撃',          lv:5, tp:'active',  src:'許褚',       d:'敵2体に武力210ダメ+挑発[1T]'},
-  {id:'敵1体に武力480ダメ+挑発[1T]',      n:'孫堅の挑発強撃',          lv:5, tp:'active',  src:'孫堅',       d:'敵1体に武力480ダメ+挑発[1T]'},
-  {id:'味方主将に防御+200[3T]+持続回復[防御×240/3T]',     n:'程普の主将強化回復策',    lv:5, tp:'start',   src:'程普',       d:'味方主将に防御+200[3T]+持続回復[防御×240/3T]'},
-  {id:'4T目に自分計略+200+敵全体計略360ダメ',      n:'呂蒙の強化全秘謀術',      lv:5, tp:'passive', src:'呂蒙',       d:'4T目に自分計略+200+敵全体計略360ダメ'},
-  {id:'敵1体に計略430ダメ+20%混乱[1T]',      n:'小虎の混乱鬼謀',          lv:5, tp:'active',  src:'小虎',       d:'敵1体に計略430ダメ+20%混乱[1T]'},
-  {id:'自分に武力+40[3T]+敵2体に武力240ダメ',     n:'甘寧の双撃',              lv:5, tp:'active',  src:'甘寧',       d:'自分に武力+40[3T]+敵2体に武力240ダメ'},
-  {id:'麻痺中の敵に防御-50[3T]+敵全体武力145ダメ',    n:'張飛の烈撃',              lv:5, tp:'active',  src:'張飛',       d:'麻痺中の敵に防御-50[3T]+敵全体武力145ダメ'},
-  {id:'敵1体に防御-40[3T]+武力480ダメ',  n:'黄忠の強撃',              lv:5, tp:'active',  src:'黄忠',       d:'敵1体に防御-40[3T]+武力480ダメ'},
-  {id:'敵2体に計略-40[3T]+計略240ダメ',       n:'徐庶の双鬼謀',            lv:5, tp:'active',  src:'徐庶',       d:'敵2体に計略-40[3T]+計略240ダメ'},
-  {id:'敵全体に計略120ダメ+25%火計[計略100/3T]',     n:'龐統の火計全鬼謀',        lv:5, tp:'active',  src:'龐統',       d:'敵全体に計略120ダメ+25%火計[計略100/3T]'},
-  {id:'敵2体に武力340ダメ、デメリット:自分武力-100[3T]',     n:'王悦の渾身双撃',          lv:5, tp:'active',  src:'王悦',       d:'敵2体に武力340ダメ、デメリット:自分武力-100[3T]'},
-  {id:'1T目:敵全体速度-90[3T]、1〜3T目:65%で敵1体混乱[1T]',    n:'貂蝉の混乱術',            lv:5, tp:'passive', src:'貂蝉',       d:'1T目:敵全体速度-90[3T]、1〜3T目:65%で敵1体混乱[1T]'},
-  {id:'敵1体に速度-40[3T]+武力480ダメ',    n:'華雄の強撃',              lv:5, tp:'active',  src:'華雄',       d:'敵1体に速度-40[3T]+武力480ダメ'},
-  {id:'自身防御+95、主将時:味方副将に武力+95',    n:'袁紹の強化策',            lv:5, tp:'start',   src:'袁紹',       d:'自身防御+95、主将時:味方副将に武力+95'},
-  {id:'自分に防御+40[3T]+敵2体に武力240ダメ',      n:'王異の双撃',              lv:5, tp:'active',  src:'王異',       d:'自分に防御+40[3T]+敵2体に武力240ダメ'},
-  {id:'自分に速度+40[3T]+敵2体に武力240ダメ',  n:'公孫瓚の双撃',            lv:5, tp:'active',  src:'公孫瓚',     d:'自分に速度+40[3T]+敵2体に武力240ダメ'},
-  {id:'敵2体に計略140ダメ+30%麻痺[1T]',     n:'黄月英の雷鳴双鬼謀',      lv:5, tp:'active',  src:'黄月英',     d:'敵2体に計略140ダメ+30%麻痺[1T]'},
-  {id:'敵2体に武力-40[3T]+武力240ダメ',    n:'顔良の武力弱化双撃',      lv:5, tp:'active',  src:'顔良',       d:'敵2体に武力-40[3T]+武力240ダメ'},
-  {id:'敵2体に防御-40[3T]+武力240ダメ',     n:'文醜の防御弱化双撃',      lv:5, tp:'active',  src:'文醜',       d:'敵2体に防御-40[3T]+武力240ダメ'},
-  {id:'麻痺中の敵に計略-50[3T]+敵全体計略145ダメ',     n:'法正の全鬼謀',            lv:5, tp:'active',  src:'法正',       d:'麻痺中の敵に計略-50[3T]+敵全体計略145ダメ'},
-  {id:'自分に武力+95、主将時:副将に武力+95',   n:'呂氏の強化策',            lv:5, tp:'start',   src:'謹賀新年呂氏',d:'自分に武力+95、主将時:副将に武力+95'},
-  {id:'敵全体を火計[計略80/3T]、主将時:10%混乱[1T]',    n:'黄蓋の全火計',            lv:5, tp:'active',  src:'黄蓋',       d:'敵全体を火計[計略80/3T]、主将時:10%混乱[1T]'},
-  {id:'敵全体に武力-140[3T]、主将時:敵全体防御・速度-70[3T]',      n:'于禁の全体弱化策',        lv:5, tp:'start',   src:'五将軍于禁', d:'敵全体に武力-140[3T]、主将時:敵全体防御・速度-70[3T]'},
-  {id:'敵1体に武力450ダメ、対象が火計状態なら追加武力170ダメ',      n:'韓当の襲火強撃',          lv:5, tp:'active',  src:'韓当',       d:'敵1体に武力450ダメ、対象が火計状態なら追加武力170ダメ'},
-  {id:'敵1体に武力・計略-40[3T]+武力420ダメ',    n:'呂蒙子明の弱化強撃',      lv:5, tp:'active',  src:'呂蒙子明',   d:'敵1体に武力・計略-40[3T]+武力420ダメ'},
-  {id:'敵1体に武力300ダメ+50%麻痺[1T]',     n:'関羽雲長の雷鳴強撃',      lv:5, tp:'active',  src:'関羽雲長',   d:'敵1体に武力300ダメ+50%麻痺[1T]'},
-  {id:'自分に武力+40[3T]、ランダム敵1体に武力170ダメ×3',  n:'呂布奉先の三乱撃',        lv:5, tp:'active',  src:'呂布奉先',   d:'自分に武力+40[3T]、ランダム敵1体に武力170ダメ×3'},
+  {id:'敵全体に防御-140[3T]、主将時:敵全体計略-140[3T]',      n:'曹操の全体弱化策',        lv:5, tp:'start',   src:'曹操',       d:'敵全体に防御-140[3T]、主将時:敵全体計略-140[3T]', own:true},
+  {id:'敵1体に武力450ダメ、対象が主将なら追加武力150ダメ',   n:'張遼の襲将強撃',          lv:5, tp:'active',  src:'張遼',       d:'敵1体に武力450ダメ、対象が主将なら追加武力150ダメ', own:true},
+  {id:'通常攻撃受け後、20%麻痺+50%で武力260ダメ',   n:'夏侯惇の雷鳴反撃術',      lv:5, tp:'passive', src:'夏侯惇',     d:'通常攻撃受け後、20%麻痺+50%で武力260ダメ', own:true},
+  {id:'武力最高の味方に武力+85、計略最高の味方に計略+85、主将時:全体防御+125[3T]',     n:'孫権の才覚強化策',        lv:5, tp:'start',   src:'孫権',       d:'武力最高の味方に武力+85、計略最高の味方に計略+85、主将時:全体防御+125[3T]', own:true},
+  {id:'敵2体を火計状態[計略ダメ威力170/3T]',      n:'周瑜の双火計',            lv:5, tp:'active',  src:'周瑜',       d:'敵2体を火計状態[計略ダメ威力170/3T]', own:true},
+  {id:'自分に武力+130[2T]+連撃状態[2T]',    n:'太史慈の連技',            lv:5, tp:'active',  src:'太史慈',     d:'自分に武力+130[2T]+連撃状態[2T]', own:true},
+  {id:'全体防御+130[3T]、主将時:全体持続回復[計略×75/3T]',      n:'劉備の全体強化回復策',    lv:5, tp:'start',   src:'劉備',       d:'全体防御+130[3T]、主将時:全体持続回復[計略×75/3T]', own:true},
+  {id:'敵全体に武力120ダメ、15%麻痺[1T]',      n:'関羽の雷鳴烈撃',          lv:5, tp:'active',  src:'関羽',       d:'敵全体に武力120ダメ、15%麻痺[1T]', own:true},
+  {id:'全体計略+130[3T]、主将時:全体持続回復[計略×75/3T]',       n:'諸葛亮の全体強化回復策',  lv:5, tp:'start',   src:'諸葛亮',     d:'全体計略+130[3T]、主将時:全体持続回復[計略×75/3T]', own:true},
+  {id:'武力最高の味方に武力・防御・速度+140[3T]、主将時:敵全体速度-140[3T]',     n:'董卓の豪傑強化策',        lv:5, tp:'start',   src:'董卓',       d:'武力最高の味方に武力・防御・速度+140[3T]、主将時:敵全体速度-140[3T]', own:true},
+  {id:'ランダム敵1体に武力120ダメ×5',        n:'呂布の伍乱撃',            lv:5, tp:'active',  src:'呂布',       d:'ランダム敵1体に武力120ダメ×5', own:true},
+  {id:'ランダム敵1体に計略120ダメ×5',     n:'張角の伍乱鬼謀',          lv:5, tp:'active',  src:'張角',       d:'ランダム敵1体に計略120ダメ×5', own:true},
+  {id:'敵1体に武力680ダメ、デメリット:自分武力-100[3T]',      n:'楽進の渾身撃',            lv:5, tp:'active',  src:'楽進',       d:'敵1体に武力680ダメ、デメリット:自分武力-100[3T]', own:true},
+  {id:'自分に防御・武力+120[3T]+持続回復[防御×240/3T]',      n:'曹仁の強化回復策',        lv:5, tp:'start',   src:'曹仁',       d:'自分に防御・武力+120[3T]+持続回復[防御×240/3T]', own:true},
+  {id:'敵1体に計略-150[3T]+計略320ダメ',     n:'程昱の鬼謀',              lv:5, tp:'active',  src:'程昱',       d:'敵1体に計略-150[3T]+計略320ダメ', own:true},
+  {id:'味方主将に武力・速度+100[3T]+持続回復[計略×240/3T]',      n:'郭嘉の主将強化回復策',    lv:5, tp:'start',   src:'郭嘉',       d:'味方主将に武力・速度+100[3T]+持続回復[計略×240/3T]', own:true},
+  {id:'2/4/6T目に味方2体へ計略×180回復',  n:'王元姫の回復秘術',        lv:5, tp:'passive', src:'王元姫',     d:'2/4/6T目に味方2体へ計略×180回復', own:true},
+  {id:'敵2体に武力210ダメ+挑発[1T]',        n:'許褚の挑発双撃',          lv:5, tp:'active',  src:'許褚',       d:'敵2体に武力210ダメ+挑発[1T]', own:true},
+  {id:'敵1体に武力480ダメ+挑発[1T]',      n:'孫堅の挑発強撃',          lv:5, tp:'active',  src:'孫堅',       d:'敵1体に武力480ダメ+挑発[1T]', own:true},
+  {id:'味方主将に防御+200[3T]+持続回復[防御×240/3T]',     n:'程普の主将強化回復策',    lv:5, tp:'start',   src:'程普',       d:'味方主将に防御+200[3T]+持続回復[防御×240/3T]', own:true},
+  {id:'4T目に自分計略+200+敵全体計略360ダメ',      n:'呂蒙の強化全秘謀術',      lv:5, tp:'passive', src:'呂蒙',       d:'4T目に自分計略+200+敵全体計略360ダメ', own:true},
+  {id:'敵1体に計略430ダメ+20%混乱[1T]',      n:'小虎の混乱鬼謀',          lv:5, tp:'active',  src:'小虎',       d:'敵1体に計略430ダメ+20%混乱[1T]', own:true},
+  {id:'自分に武力+40[3T]+敵2体に武力240ダメ',     n:'甘寧の双撃',              lv:5, tp:'active',  src:'甘寧',       d:'自分に武力+40[3T]+敵2体に武力240ダメ', own:true},
+  {id:'麻痺中の敵に防御-50[3T]+敵全体武力145ダメ',    n:'張飛の烈撃',              lv:5, tp:'active',  src:'張飛',       d:'麻痺中の敵に防御-50[3T]+敵全体武力145ダメ', own:true},
+  {id:'敵1体に防御-40[3T]+武力480ダメ',  n:'黄忠の強撃',              lv:5, tp:'active',  src:'黄忠',       d:'敵1体に防御-40[3T]+武力480ダメ', own:true},
+  {id:'敵2体に計略-40[3T]+計略240ダメ',       n:'徐庶の双鬼謀',            lv:5, tp:'active',  src:'徐庶',       d:'敵2体に計略-40[3T]+計略240ダメ', own:true},
+  {id:'敵全体に計略120ダメ+25%火計[計略100/3T]',     n:'龐統の火計全鬼謀',        lv:5, tp:'active',  src:'龐統',       d:'敵全体に計略120ダメ+25%火計[計略100/3T]', own:true},
+  {id:'敵2体に武力340ダメ、デメリット:自分武力-100[3T]',     n:'王悦の渾身双撃',          lv:5, tp:'active',  src:'王悦',       d:'敵2体に武力340ダメ、デメリット:自分武力-100[3T]', own:true},
+  {id:'1T目:敵全体速度-90[3T]、1〜3T目:65%で敵1体混乱[1T]',    n:'貂蝉の混乱術',            lv:5, tp:'passive', src:'貂蝉',       d:'1T目:敵全体速度-90[3T]、1〜3T目:65%で敵1体混乱[1T]', own:true},
+  {id:'敵1体に速度-40[3T]+武力480ダメ',    n:'華雄の強撃',              lv:5, tp:'active',  src:'華雄',       d:'敵1体に速度-40[3T]+武力480ダメ', own:true},
+  {id:'自身防御+95、主将時:味方副将に武力+95',    n:'袁紹の強化策',            lv:5, tp:'start',   src:'袁紹',       d:'自身防御+95、主将時:味方副将に武力+95', own:true},
+  {id:'自分に防御+40[3T]+敵2体に武力240ダメ',      n:'王異の双撃',              lv:5, tp:'active',  src:'王異',       d:'自分に防御+40[3T]+敵2体に武力240ダメ', own:true},
+  {id:'自分に速度+40[3T]+敵2体に武力240ダメ',  n:'公孫瓚の双撃',            lv:5, tp:'active',  src:'公孫瓚',     d:'自分に速度+40[3T]+敵2体に武力240ダメ', own:true},
+  {id:'敵2体に計略140ダメ+30%麻痺[1T]',     n:'黄月英の雷鳴双鬼謀',      lv:5, tp:'active',  src:'黄月英',     d:'敵2体に計略140ダメ+30%麻痺[1T]', own:true},
+  {id:'敵2体に武力-40[3T]+武力240ダメ',    n:'顔良の武力弱化双撃',      lv:5, tp:'active',  src:'顔良',       d:'敵2体に武力-40[3T]+武力240ダメ', own:true},
+  {id:'敵2体に防御-40[3T]+武力240ダメ',     n:'文醜の防御弱化双撃',      lv:5, tp:'active',  src:'文醜',       d:'敵2体に防御-40[3T]+武力240ダメ', own:true},
+  {id:'麻痺中の敵に計略-50[3T]+敵全体計略145ダメ',     n:'法正の全鬼謀',            lv:5, tp:'active',  src:'法正',       d:'麻痺中の敵に計略-50[3T]+敵全体計略145ダメ', own:true},
+  {id:'自分に武力+95、主将時:副将に武力+95',   n:'呂氏の強化策',            lv:5, tp:'start',   src:'謹賀新年呂氏',d:'自分に武力+95、主将時:副将に武力+95', own:true},
+  {id:'敵全体を火計[計略80/3T]、主将時:10%混乱[1T]',    n:'黄蓋の全火計',            lv:5, tp:'active',  src:'黄蓋',       d:'敵全体を火計[計略80/3T]、主将時:10%混乱[1T]', own:true},
+  {id:'敵全体に武力-140[3T]、主将時:敵全体防御・速度-70[3T]',      n:'于禁の全体弱化策',        lv:5, tp:'start',   src:'五将軍于禁', d:'敵全体に武力-140[3T]、主将時:敵全体防御・速度-70[3T]', own:true},
+  {id:'敵1体に武力450ダメ、対象が火計状態なら追加武力170ダメ',      n:'韓当の襲火強撃',          lv:5, tp:'active',  src:'韓当',       d:'敵1体に武力450ダメ、対象が火計状態なら追加武力170ダメ', own:true},
+  {id:'敵1体に武力・計略-40[3T]+武力420ダメ',    n:'呂蒙子明の弱化強撃',      lv:5, tp:'active',  src:'呂蒙子明',   d:'敵1体に武力・計略-40[3T]+武力420ダメ', own:true},
+  {id:'敵1体に武力300ダメ+50%麻痺[1T]',     n:'関羽雲長の雷鳴強撃',      lv:5, tp:'active',  src:'関羽雲長',   d:'敵1体に武力300ダメ+50%麻痺[1T]', own:true},
+  {id:'自分に武力+40[3T]、ランダム敵1体に武力170ダメ×3',  n:'呂布奉先の三乱撃',        lv:5, tp:'active',  src:'呂布奉先',   d:'自分に武力+40[3T]、ランダム敵1体に武力170ダメ×3', own:true},
   // ════════════════════════════════════════
   // 星5 スキル化スキル
   // ════════════════════════════════════════
@@ -1069,7 +1045,7 @@ GENERALS.forEach(function(g){ if(g.star <= 4) ownedG[g.id] = true; });
 SKILLS.forEach(function(s)  { if(s.lv   <= 4) ownedS[s.id] = true; });
 var squads = [];
 var sqCnt  = 0;
-var gFil = 'all', sFil = 'all', dFacFil = 'all', dTroopFil = 'all';
+var gFil = 'all', sFil = 'all', dFil = 'all';
 var mCtx = null, dragId = null;
 
 /* ================================================================
@@ -1301,6 +1277,7 @@ function renderSgrid(){
   for(var i=0;i<SKILLS.length;i++){
     var s=SKILLS[i];
     if(sFil!=='all'&&String(s.lv)!==sFil) continue;
+    if(s.own) continue; // 固有スキルは非表示
     var own=ownedS[s.id]?' owned':'';
     html+='<div class="scard'+own+'" data-lv="'+s.lv+'" onclick="toggleS(\''+s.id+'\')">'
         +'<div class="ck">✓</div>'
@@ -1349,8 +1326,7 @@ function renderDgrid(){
   for(var i=0;i<GENERALS.length;i++){
     var g=GENERALS[i];
     if(!ownedG[g.id]) continue;
-    if(dFacFil!=='all'&&g.f!==dFacFil) continue;
-    if(dTroopFil!=='all'&&(!g.troops||g.troops[dTroopFil]!=='S')) continue;
+    if(dFil!=='all'&&g.f!==dFil) continue;
     found=true;
     var u=used[g.id]?' used':'';
     var avId='dav-'+g.id;
@@ -1365,7 +1341,7 @@ function renderDgrid(){
         +(g.troops?'<div class="dgc-troops">'
           +['騎','盾','弓','槍','兵'].map(function(t){
             var r=g.troops[t]||'-';
-            return '<span class="dgc-troop tr'+r+'"><span class="dgc-tname">'+t+'</span><span class="dgc-trank">'+r+'</span></span>';
+            return '<span class="dgc-troop tr'+r+'">'+t+r+'</span>';
           }).join('')
           +'</div>':'')
         +'</div>';
@@ -1373,21 +1349,16 @@ function renderDgrid(){
   if(!found) html='<div class="nomsg">所持武将なし（所持一覧で登録）</div>';
   grid.innerHTML=html;
 }
-function fDFac(f,el){
-  dFacFil=f;
-  document.getElementById('dchips-fac').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
-  el.classList.add('on'); renderDgrid();
-}
-function fDTroop(t,el){
-  dTroopFil=t;
-  document.getElementById('dchips-troop').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+function fD(f,el){
+  dFil=f;
+  document.getElementById('dchips').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on'); renderDgrid();
 }
 
 /* ================================================================
    FORMATION – SKILL DRAG GRID
 ================================================================ */
-var sdLvFil='all', sdTpFil='all';
+var sdFil='all';
 function renderSDgrid(){
   var grid=document.getElementById('sdgrid'); if(!grid) return;
   var used=getUsedS();
@@ -1396,8 +1367,7 @@ function renderSDgrid(){
     var s=SKILLS[i];
     if(!ownedS[s.id]) continue;
     if(s.id.startsWith('fx_')) continue; // 固有スキルはスキル化済みに不要
-    if(sdLvFil!=='all'&&String(s.lv)!==sdLvFil) continue;
-    if(sdTpFil!=='all'&&s.tp!==sdTpFil) continue;
+    if(sdFil!=='all'&&String(s.lv)!==sdFil) continue;
     found=true;
     var u=used[s.id]?' used':'';
     html+='<div class="dgc'+u+'" id="sdk-'+s.id+'"'
@@ -1412,14 +1382,9 @@ function renderSDgrid(){
   if(!found) html='<div class="nomsg">所持スキルなし（所持一覧で登録）</div>';
   grid.innerHTML=html;
 }
-function fSDLv(v,el){
-  sdLvFil=v;
-  document.getElementById('sdchips-lv').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
-  el.classList.add('on'); renderSDgrid();
-}
-function fSDTp(t,el){
-  sdTpFil=t;
-  document.getElementById('sdchips-tp').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+function fSD(v,el){
+  sdFil=v;
+  document.getElementById('sdchips').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on'); renderSDgrid();
 }
 function sdClick(id){ openSkillSlotSelect(id); }
