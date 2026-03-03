@@ -392,6 +392,24 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .show-low-wrap label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;user-select:none;}
 .show-low-wrap input[type=checkbox]{width:14px;height:14px;accent-color:var(--red);cursor:pointer;}
 .hidden-by-low{display:none!important;}
+
+/* ── RESET BUTTON ── */
+.btn-reset{margin-left:auto;padding:5px 13px;border-radius:var(--rs);border:1.5px solid #fca5a5;background:#fff5f5;color:#c0392b;font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;}
+.btn-reset:hover{background:#fee2e2;border-color:#ef4444;}
+
+/* ── RESET CONFIRM MODAL ── */
+.reset-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);}
+.reset-ov.hide{display:none;}
+.reset-modal{background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.18);width:92%;max-width:360px;padding:30px 28px 24px;text-align:center;animation:rmIn .22s cubic-bezier(.34,1.56,.64,1);}
+@keyframes rmIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+.reset-icon{font-size:44px;margin-bottom:12px;line-height:1;}
+.reset-title{font-size:16px;font-weight:800;color:#18202e;margin-bottom:10px;}
+.reset-desc{font-size:13px;color:#58627a;line-height:1.7;margin-bottom:22px;}
+.reset-btns{display:flex;gap:10px;}
+.reset-cancel{flex:1;padding:10px;border-radius:var(--rs);border:1.5px solid var(--bd);background:var(--sur);font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;color:var(--tx2);cursor:pointer;transition:all .15s;}
+.reset-cancel:hover{background:var(--bg);}
+.reset-confirm{flex:1;padding:10px;border-radius:var(--rs);border:none;background:#dc2626;color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px rgba(220,38,38,.35);}
+.reset-confirm:hover{background:#b91c1c;}
 </style>
 </head>
 <body>
@@ -402,7 +420,21 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
     <button class="nb on" id="nb-roster"    onclick="goPage('roster')">所持一覧</button>
     <button class="nb"    id="nb-formation" onclick="goPage('formation')">部隊編成</button>
   </nav>
+  <button class="btn-reset" onclick="showResetConfirm()">🗑 全リセット</button>
 </header>
+
+<!-- Reset Confirmation Modal -->
+<div class="reset-ov hide" id="reset-ov">
+  <div class="reset-modal">
+    <div class="reset-icon">⚠️</div>
+    <div class="reset-title">全データをリセットしますか？</div>
+    <div class="reset-desc">所持武将・スキル・部隊編成などの<br>すべての保存データが削除されます。<br>この操作は元に戻せません。</div>
+    <div class="reset-btns">
+      <button class="reset-cancel" onclick="hideResetConfirm()">キャンセル</button>
+      <button class="reset-confirm" onclick="doReset()">リセットする</button>
+    </div>
+  </div>
+</div>
 
 <!-- PAGE: ROSTER -->
 <div class="pg on" id="pg-roster">
@@ -2453,6 +2485,30 @@ renderDgrid(); renderSDgrid(); renderSquads();
 })();
 // バックグラウンドで全武将画像をプリフェッチ
 setTimeout(prefetchAllImages, 600);
+
+/* ================================================================
+   RESET ALL
+================================================================ */
+function showResetConfirm(){
+  document.getElementById('reset-ov').classList.remove('hide');
+}
+function hideResetConfirm(){
+  document.getElementById('reset-ov').classList.add('hide');
+}
+function doReset(){
+  // クッキーを削除（過去の日付でexpire）
+  document.cookie = COOKIE_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax';
+  // 同じドメインに存在しうる他のパスのクッキーも念のため削除
+  var cookies = document.cookie.split(';');
+  for(var i=0;i<cookies.length;i++){
+    var c = cookies[i].trim();
+    var eqIdx = c.indexOf('=');
+    var name = eqIdx>-1 ? c.substring(0,eqIdx) : c;
+    document.cookie = name.trim()+'=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax';
+  }
+  // ページをリロードして初期状態に戻す
+  location.reload();
+}
 </script>
 </body>
 </html>
