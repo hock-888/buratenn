@@ -57,6 +57,10 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chip.shu.on{background:var(--shu);border-color:var(--shu);}
 .chip.oth.on{background:var(--oth);border-color:var(--oth);}
 .chip.s5.on{background:var(--s5c);border-color:var(--s5c);}
+.chip.troop-s.on{background:#b91c1c;border-color:#b91c1c;color:#fff;}
+.chip.stype-start.on{background:#065f46;border-color:#065f46;color:#fff;}
+.chip.stype-active.on{background:#b45309;border-color:#b45309;color:#fff;}
+.chip.stype-passive.on{background:#1d4ed8;border-color:#1d4ed8;color:#fff;}
 .chip.s4.on{background:var(--s4c);border-color:var(--s4c);}
 .chip.s3.on{background:var(--s3c);border-color:var(--s3c);}
 
@@ -109,12 +113,14 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
 .gc-troop.trC{background:#f1f5f9;}.gc-troop.trC .gc-trank{color:#6b7280;}
 /* 兵種適性表示（ドラッグカード） */
-.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px;width:100%;}
-.dgc-troop{font-size:7px;font-weight:800;padding:1px 2px;border-radius:2px;line-height:1.4;text-align:center;}
-.dgc-troop.trS{background:#fde8e8;color:#b91c1c;}
-.dgc-troop.trA{background:#fef3c7;color:#b45309;}
-.dgc-troop.trB{background:#dbeafe;color:#1d4ed8;}
-.dgc-troop.trC{background:#f1f5f9;color:#6b7280;}
+.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:3px;width:100%;overflow:hidden;}
+.dgc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
+.dgc-tname{color:var(--tx3);font-weight:600;font-size:6px;}
+.dgc-trank{font-weight:800;font-size:7px;}
+.dgc-troop.trS{background:#fde8e8;}.dgc-troop.trS .dgc-trank{color:#b91c1c;}
+.dgc-troop.trA{background:#fef3c7;}.dgc-troop.trA .dgc-trank{color:#b45309;}
+.dgc-troop.trB{background:#dbeafe;}.dgc-troop.trB .dgc-trank{color:#1d4ed8;}
+.dgc-troop.trC{background:#f1f5f9;}.dgc-troop.trC .dgc-trank{color:#6b7280;}
 
 /* ── SKILL CARD (roster) ── */
 .scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:3px;}
@@ -202,7 +208,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .skbadge.lv4{background:var(--s4c);color:#fff;}
 .skbadge.lv3{background:var(--s3c);color:#fff;}
 .skbadge.sk-free{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;}
-.skbtn{flex:1;min-width:0;max-width:100%;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:600;border:1.5px dashed var(--bd2);background:var(--sur);cursor:pointer;color:var(--tx3);transition:all .12s;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Noto Sans JP',sans-serif;line-height:1.4;display:block;}
+.skbtn{flex:1;min-width:0;max-width:100%;width:100%;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:600;border:1.5px dashed var(--bd2);background:var(--sur);cursor:pointer;color:var(--tx3);transition:all .12s;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Noto Sans JP',sans-serif;line-height:1.4;display:block;box-sizing:border-box;}
 .skbtn:hover{border-color:var(--red);color:var(--red);background:#fff7f7;}
 .skbtn.set{background:#f0fdf4;border-color:var(--grn);color:#15803d;border-style:solid;}
 .skbtn.fix-sk{background:#fffbeb;border-color:#fbbf24;color:#92400e;border-style:solid;cursor:default;}
@@ -465,12 +471,22 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
         <div class="dpanel" style="margin-bottom:0">
           <div class="dph">
             <span class="dpt">⚔️ 所持武将</span>
-            <div class="chips" id="dchips">
-              <span class="chip on"  onclick="fD('all',this)">全て</span>
-              <span class="chip wei" onclick="fD('魏',this)">魏</span>
-              <span class="chip wu"  onclick="fD('呉',this)">呉</span>
-              <span class="chip shu" onclick="fD('蜀',this)">蜀</span>
-              <span class="chip oth" onclick="fD('他',this)">他</span>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div class="chips" id="dchips-fac">
+                <span class="chip on" onclick="fDFac('all',this)">全て</span>
+                <span class="chip wei" onclick="fDFac('魏',this)">魏</span>
+                <span class="chip wu"  onclick="fDFac('呉',this)">呉</span>
+                <span class="chip shu" onclick="fDFac('蜀',this)">蜀</span>
+                <span class="chip oth" onclick="fDFac('他',this)">他</span>
+              </div>
+              <div class="chips" id="dchips-troop">
+                <span class="chip on" onclick="fDTroop('all',this)">全て</span>
+                <span class="chip troop-s" onclick="fDTroop('騎',this)">騎S</span>
+                <span class="chip troop-s" onclick="fDTroop('盾',this)">盾S</span>
+                <span class="chip troop-s" onclick="fDTroop('弓',this)">弓S</span>
+                <span class="chip troop-s" onclick="fDTroop('槍',this)">槍S</span>
+                <span class="chip troop-s" onclick="fDTroop('兵',this)">兵S</span>
+              </div>
             </div>
           </div>
           <div class="dgrid" id="dgrid"></div>
@@ -478,11 +494,19 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
         <div class="dpanel" style="margin-bottom:0">
           <div class="dph">
             <span class="dpt">📜 所持スキル</span>
-            <div class="chips" id="sdchips">
-              <span class="chip on" onclick="fSD('all',this)">全て</span>
-              <span class="chip s5" onclick="fSD('5',this)">★5</span>
-              <span class="chip s4" onclick="fSD('4',this)">★4</span>
-              <span class="chip s3" onclick="fSD('3',this)">★3</span>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div class="chips" id="sdchips-lv">
+                <span class="chip on" onclick="fSDLv('all',this)">全て</span>
+                <span class="chip s5" onclick="fSDLv('5',this)">★5</span>
+                <span class="chip s4" onclick="fSDLv('4',this)">★4</span>
+                <span class="chip s3" onclick="fSDLv('3',this)">★3</span>
+              </div>
+              <div class="chips" id="sdchips-tp">
+                <span class="chip on" onclick="fSDTp('all',this)">全て</span>
+                <span class="chip stype-start" onclick="fSDTp('start',this)">始動</span>
+                <span class="chip stype-active" onclick="fSDTp('active',this)">アクティブ</span>
+                <span class="chip stype-passive" onclick="fSDTp('passive',this)">パッシブ</span>
+              </div>
             </div>
           </div>
           <div class="dgrid" id="sdgrid"></div>
@@ -1045,7 +1069,7 @@ GENERALS.forEach(function(g){ if(g.star <= 4) ownedG[g.id] = true; });
 SKILLS.forEach(function(s)  { if(s.lv   <= 4) ownedS[s.id] = true; });
 var squads = [];
 var sqCnt  = 0;
-var gFil = 'all', sFil = 'all', dFil = 'all';
+var gFil = 'all', sFil = 'all', dFacFil = 'all', dTroopFil = 'all';
 var mCtx = null, dragId = null;
 
 /* ================================================================
@@ -1175,6 +1199,28 @@ function findG(id){ for(var i=0;i<GENERALS.length;i++) if(GENERALS[i].id===id) r
 function findS(id){ for(var i=0;i<SKILLS.length;i++) if(SKILLS[i].id===id) return SKILLS[i]; return null; }
 function findSAll(id){ for(var i=0;i<ALL_SKILLS.length;i++) if(ALL_SKILLS[i].id===id) return ALL_SKILLS[i]; return null; }
 function findSq(id){ for(var i=0;i<squads.length;i++) if(squads[i].id===id) return squads[i]; return null; }
+// 武将名から固有スキルを検索（srcフィールドで照合）
+function findFxSkByGenName(genName){
+  for(var i=0;i<ALL_SKILLS.length;i++){
+    var s=ALL_SKILLS[i];
+    if(s.src===genName && s.n && s.n.indexOf('の')!==-1) return s;
+  }
+  // 名前に含むもので再検索
+  for(var i=0;i<ALL_SKILLS.length;i++){
+    var s=ALL_SKILLS[i];
+    if(s.src===genName) return s;
+  }
+  return null;
+}
+// 武将オブジェクトから固有スキルを取得
+function getFxSkill(g){
+  if(!g) return null;
+  // ALL_SKILLSのnフィールドとg.fxが一致するものを探す
+  for(var i=0;i<ALL_SKILLS.length;i++){
+    if(ALL_SKILLS[i].n===g.fx) return ALL_SKILLS[i];
+  }
+  return null;
+}
 
 /* ================================================================
    PAGE NAV
@@ -1303,7 +1349,8 @@ function renderDgrid(){
   for(var i=0;i<GENERALS.length;i++){
     var g=GENERALS[i];
     if(!ownedG[g.id]) continue;
-    if(dFil!=='all'&&g.f!==dFil) continue;
+    if(dFacFil!=='all'&&g.f!==dFacFil) continue;
+    if(dTroopFil!=='all'&&(!g.troops||g.troops[dTroopFil]!=='S')) continue;
     found=true;
     var u=used[g.id]?' used':'';
     var avId='dav-'+g.id;
@@ -1318,7 +1365,7 @@ function renderDgrid(){
         +(g.troops?'<div class="dgc-troops">'
           +['騎','盾','弓','槍','兵'].map(function(t){
             var r=g.troops[t]||'-';
-            return '<span class="dgc-troop tr'+r+'">'+t+r+'</span>';
+            return '<span class="dgc-troop tr'+r+'"><span class="dgc-tname">'+t+'</span><span class="dgc-trank">'+r+'</span></span>';
           }).join('')
           +'</div>':'')
         +'</div>';
@@ -1326,16 +1373,21 @@ function renderDgrid(){
   if(!found) html='<div class="nomsg">所持武将なし（所持一覧で登録）</div>';
   grid.innerHTML=html;
 }
-function fD(f,el){
-  dFil=f;
-  document.getElementById('dchips').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+function fDFac(f,el){
+  dFacFil=f;
+  document.getElementById('dchips-fac').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on'); renderDgrid();
+}
+function fDTroop(t,el){
+  dTroopFil=t;
+  document.getElementById('dchips-troop').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on'); renderDgrid();
 }
 
 /* ================================================================
    FORMATION – SKILL DRAG GRID
 ================================================================ */
-var sdFil='all';
+var sdLvFil='all', sdTpFil='all';
 function renderSDgrid(){
   var grid=document.getElementById('sdgrid'); if(!grid) return;
   var used=getUsedS();
@@ -1344,7 +1396,8 @@ function renderSDgrid(){
     var s=SKILLS[i];
     if(!ownedS[s.id]) continue;
     if(s.id.startsWith('fx_')) continue; // 固有スキルはスキル化済みに不要
-    if(sdFil!=='all'&&String(s.lv)!==sdFil) continue;
+    if(sdLvFil!=='all'&&String(s.lv)!==sdLvFil) continue;
+    if(sdTpFil!=='all'&&s.tp!==sdTpFil) continue;
     found=true;
     var u=used[s.id]?' used':'';
     html+='<div class="dgc'+u+'" id="sdk-'+s.id+'"'
@@ -1359,9 +1412,14 @@ function renderSDgrid(){
   if(!found) html='<div class="nomsg">所持スキルなし（所持一覧で登録）</div>';
   grid.innerHTML=html;
 }
-function fSD(v,el){
-  sdFil=v;
-  document.getElementById('sdchips').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+function fSDLv(v,el){
+  sdLvFil=v;
+  document.getElementById('sdchips-lv').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
+  el.classList.add('on'); renderSDgrid();
+}
+function fSDTp(t,el){
+  sdTpFil=t;
+  document.getElementById('sdchips-tp').querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');});
   el.classList.add('on'); renderSDgrid();
 }
 function sdClick(id){ openSkillSlotSelect(id); }
@@ -2029,8 +2087,8 @@ function shareDiscord(){
 
           // スキル（固有＋2枠）
           var skList = [];
-          var fxsk = g.fxsk ? findSAll(g.fxsk) : null;
-          if(fxsk) skList.push({label:'固有', bg:C.fixbg, fg:C.fixtx, name:fxsk.n});
+          var fxsk = getFxSkill(g);
+          skList.push({label:'固有', bg:C.fixbg, fg:C.fixtx, name:fxsk?fxsk.n:(g.fx||'固有スキル')});
           for(var ski=0;ski<slot.sk.length;ski++){
             var sk = slot.sk[ski] ? findS(slot.sk[ski]) : null;
             if(sk){
@@ -2269,7 +2327,7 @@ function renderSlot(qid,si,slot,sqTroop){
         +'<div class="skrow"><span class="skbadge fix">固有</span>'
         +'<div class="sk-tip-wrap">'
         +'<button class="skbtn fix-sk">'+eh(g.fx)+'</button>'
-        +mkSkTip(findSAll(g.fxsk))
+        +mkSkTip(getFxSkill(g))
         +'</div></div>'
         +'<div class="skrow"><span class="skbadge sk-free">スキル1</span>'
         +'<div class="sk-tip-wrap">'
