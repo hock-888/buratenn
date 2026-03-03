@@ -109,12 +109,14 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
 .gc-troop.trC{background:#f1f5f9;}.gc-troop.trC .gc-trank{color:#6b7280;}
 /* 兵種適性表示（ドラッグカード） */
-.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px;width:100%;}
-.dgc-troop{font-size:7px;font-weight:800;padding:1px 2px;border-radius:2px;line-height:1.4;text-align:center;}
-.dgc-troop.trS{background:#fde8e8;color:#b91c1c;}
-.dgc-troop.trA{background:#fef3c7;color:#b45309;}
-.dgc-troop.trB{background:#dbeafe;color:#1d4ed8;}
-.dgc-troop.trC{background:#f1f5f9;color:#6b7280;}
+.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:3px;width:100%;}
+.dgc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
+.dgc-tname{font-size:6px;font-weight:700;}
+.dgc-trank{font-size:7px;font-weight:800;}
+.dgc-troop.trS{background:#fde8e8;}.dgc-troop.trS .dgc-trank{color:#b91c1c;}
+.dgc-troop.trA{background:#fef3c7;}.dgc-troop.trA .dgc-trank{color:#b45309;}
+.dgc-troop.trB{background:#dbeafe;}.dgc-troop.trB .dgc-trank{color:#1d4ed8;}
+.dgc-troop.trC{background:#f1f5f9;}.dgc-troop.trC .dgc-trank{color:#6b7280;}
 
 /* ── SKILL CARD (roster) ── */
 .scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:3px;}
@@ -1341,7 +1343,7 @@ function renderDgrid(){
         +(g.troops?'<div class="dgc-troops">'
           +['騎','盾','弓','槍','兵'].map(function(t){
             var r=g.troops[t]||'-';
-            return '<span class="dgc-troop tr'+r+'">'+t+r+'</span>';
+            return '<span class="dgc-troop tr'+r+'"><span class="dgc-tname">'+t+'</span><span class="dgc-trank">'+r+'</span></span>';
           }).join('')
           +'</div>':'')
         +'</div>';
