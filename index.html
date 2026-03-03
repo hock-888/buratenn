@@ -38,7 +38,12 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 
 /* ── PANEL ── */
 .panel{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
-.ph{padding:11px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ph{padding:11px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;user-select:none;}
+.ph:hover{background:rgba(0,0,0,.03);}
+.ph-toggle{margin-left:auto;font-size:16px;transition:transform .25s;color:var(--tx3);line-height:1;}
+.panel-body{display:none;}
+.panel-body.open{display:block;}
+.panel-body:not(.open) .cgrid{min-height:0;}
 .pt{font-size:13px;font-weight:700;flex-shrink:0;}
 .pc{font-size:11px;color:var(--tx3);margin-left:auto;}
 
@@ -95,10 +100,10 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .ck{position:absolute;top:4px;right:4px;width:15px;height:15px;border-radius:50%;background:var(--grn);display:none;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:900;}
 .gcard.owned .ck{display:flex;}
 /* 兵種適性表示（所持一覧カード） */
-.gc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:4px;width:100%;}
-.gc-troop{display:flex;align-items:center;justify-content:space-between;padding:1px 3px;border-radius:3px;font-size:8px;font-weight:700;line-height:1.5;}
-.gc-tname{color:var(--tx3);font-weight:600;}
-.gc-trank{font-weight:800;}
+.gc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:4px;width:100%;}
+.gc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
+.gc-tname{color:var(--tx3);font-weight:600;font-size:6.5px;}
+.gc-trank{font-weight:800;font-size:7.5px;}
 .gc-troop.trS{background:#fde8e8;}.gc-troop.trS .gc-trank{color:#b91c1c;}
 .gc-troop.trA{background:#fef3c7;}.gc-troop.trA .gc-trank{color:#b45309;}
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
@@ -122,7 +127,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .sc-src{font-size:9px;color:var(--tx3);line-height:1.3;}
 
 /* ── ROSTER BODY ── */
-.rb{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.rb{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
 @media(max-width:820px){.rb{grid-template-columns:1fr;}}
 
 /* ── FORMATION BODY ── */
@@ -203,7 +208,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .skbtn.fix-sk{background:#fffbeb;border-color:#fbbf24;color:#92400e;border-style:solid;cursor:default;}
 
 /* ── DRAG PANELS WRAPPER ── */
-.dpanels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.dpanels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;align-items:start;}
 @media(max-width:660px){.dpanels{grid-template-columns:1fr;}}
 
 /* ── SKILL DROP ZONE in slot ── */
@@ -391,31 +396,37 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
   </div>
   <div class="rb">
     <div class="panel">
-      <div class="ph">
+      <div class="ph" onclick="togglePanel('ggrid-body')">
         <span class="pt">⚔️ 武将所持一覧</span>
         <div class="chips" id="gchips">
-          <span class="chip on"  onclick="fG('all',this)">全て</span>
-          <span class="chip wei" onclick="fG('魏',this)">魏</span>
-          <span class="chip wu"  onclick="fG('呉',this)">呉</span>
-          <span class="chip shu" onclick="fG('蜀',this)">蜀</span>
-          <span class="chip oth" onclick="fG('他',this)">他</span>
+          <span class="chip on"  onclick="fG('all',this);event.stopPropagation()">全て</span>
+          <span class="chip wei" onclick="fG('魏',this);event.stopPropagation()">魏</span>
+          <span class="chip wu"  onclick="fG('呉',this);event.stopPropagation()">呉</span>
+          <span class="chip shu" onclick="fG('蜀',this);event.stopPropagation()">蜀</span>
+          <span class="chip oth" onclick="fG('他',this);event.stopPropagation()">他</span>
         </div>
         <span class="pc" id="gcnt"></span>
+        <span class="ph-toggle" id="ggrid-toggle">＋</span>
       </div>
-      <div class="cgrid" id="ggrid"></div>
+      <div class="panel-body" id="ggrid-body">
+        <div class="cgrid" id="ggrid"></div>
+      </div>
     </div>
     <div class="panel">
-      <div class="ph">
+      <div class="ph" onclick="togglePanel('sgrid-body')">
         <span class="pt">📜 スキル所持一覧（スキル化済）</span>
         <div class="chips" id="schips">
-          <span class="chip on" onclick="fS('all',this)">全て</span>
-          <span class="chip s5" onclick="fS('5',this)">★5</span>
-          <span class="chip s4" onclick="fS('4',this)">★4</span>
-          <span class="chip s3" onclick="fS('3',this)">★3</span>
+          <span class="chip on" onclick="fS('all',this);event.stopPropagation()">全て</span>
+          <span class="chip s5" onclick="fS('5',this);event.stopPropagation()">★5</span>
+          <span class="chip s4" onclick="fS('4',this);event.stopPropagation()">★4</span>
+          <span class="chip s3" onclick="fS('3',this);event.stopPropagation()">★3</span>
         </div>
         <span class="pc" id="scnt"></span>
+        <span class="ph-toggle" id="sgrid-toggle">＋</span>
       </div>
-      <div class="cgrid" id="sgrid"></div>
+      <div class="panel-body" id="sgrid-body">
+        <div class="cgrid" id="sgrid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -432,7 +443,6 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
   </div>
   <div class="fb">
     <div>
-      <div class="dpanels">
       <div class="squads" id="squads"></div>
       <div class="dpanels">
         <div class="dpanel" style="margin-bottom:0">
@@ -2337,6 +2347,16 @@ document.getElementById('ov').addEventListener('click',function(e){ if(e.target=
 /* ================================================================
    LOW STAR FILTER
 ================================================================ */
+function togglePanel(bodyId){
+  var body=document.getElementById(bodyId);
+  var toggleId=bodyId.replace('-body','-toggle');
+  var toggle=document.getElementById(toggleId);
+  if(!body) return;
+  var isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  if(toggle) toggle.textContent=isOpen?'＋':'－';
+}
+
 function applyLowFilter(){
   var show = document.getElementById('chk-show-low').checked;
   // generals
@@ -2361,6 +2381,18 @@ ensureSquad();
 renderGgrid();
 renderSgrid();
 renderDgrid(); renderSDgrid(); renderSquads();
+// PC(>820px)はデフォルトで両パネルを開く、スマホは閉じたまま
+(function(){
+  if(window.innerWidth > 820){
+    ['ggrid-body','sgrid-body'].forEach(function(id){
+      var body=document.getElementById(id);
+      var toggleId=id.replace('-body','-toggle');
+      var toggle=document.getElementById(toggleId);
+      if(body){ body.classList.add('open'); }
+      if(toggle){ toggle.textContent='－'; }
+    });
+  }
+})();
 // バックグラウンドで全武将画像をプリフェッチ
 setTimeout(prefetchAllImages, 600);
 </script>
