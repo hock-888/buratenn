@@ -95,7 +95,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .ck{position:absolute;top:4px;right:4px;width:15px;height:15px;border-radius:50%;background:var(--grn);display:none;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:900;}
 .gcard.owned .ck{display:flex;}
 /* 兵種適性表示（所持一覧カード） */
-.gc-troops{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:4px;width:100%;}
+.gc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:4px;width:100%;}
 .gc-troop{display:flex;align-items:center;justify-content:space-between;padding:1px 3px;border-radius:3px;font-size:8px;font-weight:700;line-height:1.5;}
 .gc-tname{color:var(--tx3);font-weight:600;}
 .gc-trank{font-weight:800;}
@@ -104,7 +104,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
 .gc-troop.trC{background:#f1f5f9;}.gc-troop.trC .gc-trank{color:#6b7280;}
 /* 兵種適性表示（ドラッグカード） */
-.dgc-troops{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:3px;width:100%;}
+.dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:3px;width:100%;}
 .dgc-troop{font-size:7px;font-weight:800;padding:1px 2px;border-radius:2px;line-height:1.4;text-align:center;}
 .dgc-troop.trS{background:#fde8e8;color:#b91c1c;}
 .dgc-troop.trA{background:#fef3c7;color:#b45309;}
@@ -277,6 +277,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 #share-preview .tbtn.on.t弓{background:#16a34a;}
 #share-preview .tbtn.on.t槍{background:#b45309;}
 #share-preview .tbtn.on.t兵{background:#374151;}
+#share-preview .tbtn.on.t騎{background:#7c3aed;}
 #share-preview .stat-row{display:flex;gap:4px;margin-top:4px;}
 #share-preview .stat-item{display:flex;gap:2px;align-items:center;background:#f1f5f9;border-radius:3px;padding:1px 4px;}
 #share-preview .stat-lbl{font-size:8px;color:#96a0b5;font-weight:700;}
@@ -319,6 +320,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .tbtn.on.t弓{background:#b45309;border-color:#b45309;color:#fff;box-shadow:0 2px 6px rgba(180,83,9,.35);}
 .tbtn.on.t槍{background:#15803d;border-color:#15803d;color:#fff;box-shadow:0 2px 6px rgba(21,128,61,.35);}
 .tbtn.on.t兵{background:#dc2626;border-color:#dc2626;color:#fff;box-shadow:0 2px 6px rgba(220,38,38,.35);}
+.tbtn.on.t騎{background:#7c3aed;border-color:#7c3aed;color:#fff;box-shadow:0 2px 6px rgba(124,58,237,.35);}
 
 /* 兵種適性ランク表示 */
 .troop-ranks{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;}
@@ -355,6 +357,17 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .stat-item{display:flex;align-items:center;gap:2px;font-size:9px;font-weight:600;}
 .stat-lbl{color:var(--tx3);}
 .stat-val{color:var(--tx);font-weight:700;}
+
+/* ── ROSTER SECTION HEADER ── */
+.section-hd{padding:10px 20px 6px;display:flex;align-items:center;gap:8px;}
+.section-title{font-size:16px;font-weight:800;color:var(--tx);letter-spacing:.3px;}
+.section-badge{font-size:11px;font-weight:700;background:var(--bg);border:1px solid var(--bd);border-radius:20px;padding:2px 10px;color:var(--tx2);}
+
+/* ── SHOW LOW CHECKBOX ── */
+.show-low-wrap{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.show-low-wrap label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;user-select:none;}
+.show-low-wrap input[type=checkbox]{width:14px;height:14px;accent-color:var(--red);cursor:pointer;}
+.hidden-by-low{display:none!important;}
 </style>
 </head>
 <body>
@@ -372,11 +385,14 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
   <div class="sh">
     <div class="sh-t">所持武将・スキル管理</div>
     <div class="sh-s">カードをクリックして所持 / 未所持を切り替え</div>
+    <div class="show-low-wrap">
+      <label><input type="checkbox" id="chk-show-low" onchange="applyLowFilter()"> ★4以下を表示</label>
+    </div>
   </div>
   <div class="rb">
     <div class="panel">
       <div class="ph">
-        <span class="pt">⚔️ 武将</span>
+        <span class="pt">⚔️ 武将所持一覧</span>
         <div class="chips" id="gchips">
           <span class="chip on"  onclick="fG('all',this)">全て</span>
           <span class="chip wei" onclick="fG('魏',this)">魏</span>
@@ -390,7 +406,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
     </div>
     <div class="panel">
       <div class="ph">
-        <span class="pt">📜 スキル（スキル化済）</span>
+        <span class="pt">📜 スキル所持一覧（スキル化済）</span>
         <div class="chips" id="schips">
           <span class="chip on" onclick="fS('all',this)">全て</span>
           <span class="chip s5" onclick="fS('5',this)">★5</span>
@@ -468,39 +484,39 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 var GENERALS = [
   // ── 星5 戦闘武将 ──
   // troop: {盾,弓,槍,兵} ランク / stats: {武力,防御,計略,速度} Lv1値
-  {id:'caocao',      n:'曹操',   f:'魏',c:7,star:5,fx:'曹操の全体弱化策',      fxsk:'fx_caocao',     pid:'379665404588467123', troops:{盾:'S',弓:'S',槍:'A',兵:'A'}, stats:{武:72,防:81,計:82,速:72}},
-  {id:'zhangliao',   n:'張遼',   f:'魏',c:7,star:5,fx:'張遼の襲将強撃',        fxsk:'fx_zhangliao',  pid:'379665497668492304', troops:{盾:'S',弓:'A',槍:'C',兵:'S'}, stats:{武:95,防:70,計:64,速:74}},
-  {id:'xiahoudan',   n:'夏侯惇', f:'魏',c:7,star:5,fx:'夏侯惇の雷鳴反撃術',    fxsk:'fx_xiahoudan',  pid:'379665591755119632', troops:{盾:'S',弓:'S',槍:'C',兵:'A'}, stats:{武:84,防:96,計:58,速:64}},
-  {id:'sonquan',     n:'孫権',   f:'呉',c:7,star:5,fx:'孫権の才覚強化策',      fxsk:'fx_sonquan',    pid:'379665683241251256', troops:{盾:'A',弓:'S',槍:'S',兵:'A'}, stats:{武:72,防:83,計:81,速:70}},
-  {id:'zhouyu',      n:'周瑜',   f:'呉',c:7,star:5,fx:'周瑜の双火計',          fxsk:'fx_zhouyu',     pid:'379665760986870200', troops:{盾:'S',弓:'B',槍:'S',兵:'C'}, stats:{武:39,防:81,計:99,速:83}},
-  {id:'taishici',    n:'太史慈', f:'呉',c:6,star:5,fx:'太史慈の連技',          fxsk:'fx_taishici',   pid:'379665840913579882', troops:{盾:'A',弓:'C',槍:'S',兵:'B'}, stats:{武:87,防:66,計:47,速:62}},
-  {id:'liubei',      n:'劉備',   f:'蜀',c:7,star:5,fx:'劉備の全体強化回復策',  fxsk:'fx_liubei',     pid:'379665912032167969', troops:{盾:'A',弓:'S',槍:'A',兵:'S'}, stats:{武:75,防:80,計:79,速:68}},
-  {id:'guanyu',      n:'関羽',   f:'蜀',c:7,star:5,fx:'関羽の雷鳴烈撃',        fxsk:'fx_guanyu',     pid:'379665991472285729', troops:{盾:'S',弓:'A',槍:'C',兵:'S'}, stats:{武:96,防:76,計:59,速:75}},
-  {id:'zhuge',       n:'諸葛亮', f:'蜀',c:7,star:5,fx:'諸葛亮の全体強化回復策',fxsk:'fx_zhuge',      pid:'379666072774701223', troops:{盾:'C',弓:'S',槍:'S',兵:'A'}, stats:{武:39,防:83,計:100,速:81}},
-  {id:'donzhuo',     n:'董卓',   f:'他',c:7,star:5,fx:'董卓の豪傑強化策',      fxsk:'fx_donzhuo',    pid:'379666144564359608', troops:{盾:'S',弓:'S',槍:'A',兵:'A'}, stats:{武:82,防:82,計:68,速:71}},
-  {id:'lvbu',        n:'呂布',   f:'他',c:7,star:5,fx:'呂布の伍乱撃',          fxsk:'fx_lvbu',       pid:'379666214391182822', troops:{盾:'S',弓:'C',槍:'A',兵:'S'}, stats:{武:100,防:84,計:34,速:84}},
-  {id:'zhanghe',     n:'張角',   f:'他',c:6,star:5,fx:'張角の伍乱鬼謀',        fxsk:'fx_zhanghe',    pid:'379666289385312896', troops:{盾:'B',弓:'S',槍:'S',兵:'C'}, stats:{武:37,防:72,計:89,速:61}},
-  {id:'yuejin',      n:'楽進',   f:'魏',c:5,star:5,fx:'楽進の渾身撃',          fxsk:'fx_yuejin',     pid:'379666790050964403', troops:{盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:85,防:51,計:41,速:41}},
-  {id:'caoren',      n:'曹仁',   f:'魏',c:6,star:5,fx:'曹仁の強化回復策',      fxsk:'fx_caoren',     pid:'379666871319798707', troops:{盾:'S',弓:'S',槍:'B',兵:'B'}, stats:{武:66,防:89,計:57,速:47}},
-  {id:'chengyu',     n:'程昱',   f:'魏',c:6,star:5,fx:'程昱の鬼謀',            fxsk:'fx_chengyu',    pid:'379667064257782707', troops:{盾:'A',弓:'S',槍:'A',兵:'C'}, stats:{武:38,防:71,計:87,速:66}},
-  {id:'guojia',      n:'郭嘉',   f:'魏',c:6,star:5,fx:'郭嘉の主将強化回復策',  fxsk:'fx_guojia',     pid:'379667163713143143', troops:{盾:'C',弓:'S',槍:'B',兵:'A'}, stats:{武:35,防:64,計:90,速:70}},
-  {id:'wangyuanji',  n:'王元姫', f:'魏',c:5,star:5,fx:'王元姫の回復秘術',      fxsk:'fx_wangyuanji', pid:'379667246710030695', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:30,防:53,計:80,速:53}},
-  {id:'xuke',        n:'許褚',   f:'魏',c:6,star:5,fx:'許褚の挑発双撃',        fxsk:'fx_xuke',       pid:'379667525698356433', troops:{盾:'A',弓:'A',槍:'C',兵:'S'}, stats:{武:81,防:88,計:38,速:55}},
-  {id:'suncon',      n:'孫堅',   f:'呉',c:6,star:5,fx:'孫堅の挑発強撃',        fxsk:'fx_suncon',     pid:'379668110233321051', troops:{盾:'C',弓:'A',槍:'B',兵:'S'}, stats:{武:82,防:87,計:59,速:33}},
-  {id:'chengpu',     n:'程普',   f:'呉',c:5,star:5,fx:'程普の主将強化回復策',  fxsk:'fx_chengpu',    pid:'379668216550538843', troops:{盾:'C',弓:'A',槍:'A',兵:'S'}, stats:{武:56,防:75,計:56,速:31}},
-  {id:'lvmeng',      n:'呂蒙',   f:'呉',c:6,star:5,fx:'呂蒙の強化全秘謀術',    fxsk:'fx_lvmeng',     pid:'379668307046830493', troops:{盾:'B',弓:'C',槍:'A',兵:'S'}, stats:{武:79,防:66,計:86,速:30}},
-  {id:'xiaohu',      n:'小虎',   f:'呉',c:5,star:5,fx:'小虎の混乱鬼謀',        fxsk:'fx_xiaohu',     pid:'379669692459023748', troops:{盾:'A',弓:'C',槍:'S',兵:'B'}, stats:{武:39,防:53,計:64,速:63}},
-  {id:'ganning',     n:'甘寧',   f:'呉',c:6,star:5,fx:'甘寧の双撃',            fxsk:'fx_ganning',    pid:'379669829226919398', troops:{盾:'A',弓:'C',槍:'A',兵:'S'}, stats:{武:88,防:60,計:38,速:77}},
-  {id:'zhangfei',    n:'張飛',   f:'蜀',c:6,star:5,fx:'張飛の烈撃',            fxsk:'fx_zhangfei',   pid:'379670007736490104', troops:{盾:'A',弓:'A',槍:'C',兵:'S'}, stats:{武:90,防:74,計:30,速:68}},
-  {id:'huangzhong',  n:'黄忠',   f:'蜀',c:6,star:5,fx:'黄忠の強撃',            fxsk:'fx_huangzhong', pid:'379670418107162354', troops:{盾:'A',弓:'B',槍:'S',兵:'B'}, stats:{武:88,防:70,計:56,速:47}},
-  {id:'xushu',       n:'徐庶',   f:'蜀',c:5,star:5,fx:'徐庶の双鬼謀',          fxsk:'fx_xushu',      pid:'379670515163366245', troops:{盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:30,防:65,計:83,速:40}},
-  {id:'pantong',     n:'龐統',   f:'蜀',c:6,star:5,fx:'龐統の火計全鬼謀',      fxsk:'fx_pantong',    pid:'379671375012430168', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:39,防:69,計:88,速:64}},
-  {id:'wangyue',     n:'王悦',   f:'蜀',c:5,star:5,fx:'王悦の渾身双撃',        fxsk:'fx_wangyue',    pid:'379671468830638153', troops:{盾:'S',弓:'C',槍:'C',兵:'S'}, stats:{武:80,防:58,計:44,速:37}},
-  {id:'diaochan',    n:'貂蝉',   f:'他',c:6,star:5,fx:'貂蝉の混乱術',          fxsk:'fx_diaochan',   pid:'379671551206777879', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:31,防:80,計:64,速:86}},
-  {id:'huaxiong',    n:'華雄',   f:'他',c:5,star:5,fx:'華雄の強撃',            fxsk:'fx_huaxiong',   pid:'379671814927827017', troops:{盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:83,防:53,計:41,速:41}},
-  {id:'yuanshao',    n:'袁紹',   f:'他',c:6,star:5,fx:'袁紹の強化策',          fxsk:'fx_yuanshao',   pid:'379672125373415768', troops:{盾:'A',弓:'S',槍:'A',兵:'C'}, stats:{武:66,防:72,計:66,速:58}},
-  {id:'wangyi',      n:'王異',   f:'他',c:5,star:5,fx:'王異の双撃',            fxsk:'fx_wangyi',     pid:'379672216322767942', troops:{盾:'S',弓:'S',槍:'C',兵:'C'}, stats:{武:63,防:82,計:30,速:41}},
-  {id:'gongsunzan',  n:'公孫瓚', f:'他',c:6,star:5,fx:'公孫瓚の双撃',          fxsk:'fx_gongsunzan', pid:'379672928918201367', troops:{盾:'S',弓:'A',槍:'C',兵:'C'}, stats:{武:78,防:55,計:41,速:89}},
+  {id:'caocao',      n:'曹操',   f:'魏',c:7,star:5,fx:'曹操の全体弱化策',      fxsk:'fx_caocao',     pid:'379665404588467123', troops:{騎:'C',盾:'S',弓:'S',槍:'A',兵:'A'}, stats:{武:72,防:81,計:82,速:72}},
+  {id:'zhangliao',   n:'張遼',   f:'魏',c:7,star:5,fx:'張遼の襲将強撃',        fxsk:'fx_zhangliao',  pid:'379665497668492304', troops:{騎:'B',盾:'S',弓:'A',槍:'C',兵:'S'}, stats:{武:95,防:70,計:64,速:74}},
+  {id:'xiahoudan',   n:'夏侯惇', f:'魏',c:7,star:5,fx:'夏侯惇の雷鳴反撃術',    fxsk:'fx_xiahoudan',  pid:'379665591755119632', troops:{騎:'C',盾:'S',弓:'S',槍:'C',兵:'A'}, stats:{武:84,防:96,計:58,速:64}},
+  {id:'sonquan',     n:'孫権',   f:'呉',c:7,star:5,fx:'孫権の才覚強化策',      fxsk:'fx_sonquan',    pid:'379665683241251256', troops:{騎:'C',盾:'A',弓:'S',槍:'S',兵:'A'}, stats:{武:72,防:83,計:81,速:70}},
+  {id:'zhouyu',      n:'周瑜',   f:'呉',c:7,star:5,fx:'周瑜の双火計',          fxsk:'fx_zhouyu',     pid:'379665760986870200', troops:{騎:'C',盾:'S',弓:'B',槍:'S',兵:'C'}, stats:{武:39,防:81,計:99,速:83}},
+  {id:'taishici',    n:'太史慈', f:'呉',c:6,star:5,fx:'太史慈の連技',          fxsk:'fx_taishici',   pid:'379665840913579882', troops:{騎:'B',盾:'A',弓:'C',槍:'S',兵:'B'}, stats:{武:87,防:66,計:47,速:62}},
+  {id:'liubei',      n:'劉備',   f:'蜀',c:7,star:5,fx:'劉備の全体強化回復策',  fxsk:'fx_liubei',     pid:'379665912032167969', troops:{騎:'C',盾:'A',弓:'S',槍:'A',兵:'S'}, stats:{武:75,防:80,計:79,速:68}},
+  {id:'guanyu',      n:'関羽',   f:'蜀',c:7,star:5,fx:'関羽の雷鳴烈撃',        fxsk:'fx_guanyu',     pid:'379665991472285729', troops:{騎:'C',盾:'S',弓:'A',槍:'C',兵:'S'}, stats:{武:96,防:76,計:59,速:75}},
+  {id:'zhuge',       n:'諸葛亮', f:'蜀',c:7,star:5,fx:'諸葛亮の全体強化回復策',fxsk:'fx_zhuge',      pid:'379666072774701223', troops:{騎:'A',盾:'C',弓:'S',槍:'S',兵:'A'}, stats:{武:39,防:83,計:100,速:81}},
+  {id:'donzhuo',     n:'董卓',   f:'他',c:7,star:5,fx:'董卓の豪傑強化策',      fxsk:'fx_donzhuo',    pid:'379666144564359608', troops:{騎:'C',盾:'S',弓:'S',槍:'A',兵:'A'}, stats:{武:82,防:82,計:68,速:71}},
+  {id:'lvbu',        n:'呂布',   f:'他',c:7,star:5,fx:'呂布の伍乱撃',          fxsk:'fx_lvbu',       pid:'379666214391182822', troops:{騎:'C',盾:'S',弓:'C',槍:'A',兵:'S'}, stats:{武:100,防:84,計:34,速:84}},
+  {id:'zhanghe',     n:'張角',   f:'他',c:6,star:5,fx:'張角の伍乱鬼謀',        fxsk:'fx_zhanghe',    pid:'379666289385312896', troops:{騎:'A',盾:'B',弓:'S',槍:'S',兵:'C'}, stats:{武:37,防:72,計:89,速:61}},
+  {id:'yuejin',      n:'楽進',   f:'魏',c:5,star:5,fx:'楽進の渾身撃',          fxsk:'fx_yuejin',     pid:'379666790050964403', troops:{騎:'S',盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:85,防:51,計:41,速:41}},
+  {id:'caoren',      n:'曹仁',   f:'魏',c:6,star:5,fx:'曹仁の強化回復策',      fxsk:'fx_caoren',     pid:'379666871319798707', troops:{騎:'C',盾:'S',弓:'S',槍:'B',兵:'B'}, stats:{武:66,防:89,計:57,速:47}},
+  {id:'chengyu',     n:'程昱',   f:'魏',c:6,star:5,fx:'程昱の鬼謀',            fxsk:'fx_chengyu',    pid:'379667064257782707', troops:{騎:'A',盾:'A',弓:'S',槍:'A',兵:'C'}, stats:{武:38,防:71,計:87,速:66}},
+  {id:'guojia',      n:'郭嘉',   f:'魏',c:6,star:5,fx:'郭嘉の主将強化回復策',  fxsk:'fx_guojia',     pid:'379667163713143143', troops:{騎:'C',盾:'C',弓:'S',槍:'B',兵:'A'}, stats:{武:35,防:64,計:90,速:70}},
+  {id:'wangyuanji',  n:'王元姫', f:'魏',c:5,star:5,fx:'王元姫の回復秘術',      fxsk:'fx_wangyuanji', pid:'379667246710030695', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:30,防:53,計:80,速:53}},
+  {id:'xuke',        n:'許褚',   f:'魏',c:6,star:5,fx:'許褚の挑発双撃',        fxsk:'fx_xuke',       pid:'379667525698356433', troops:{騎:'C',盾:'A',弓:'A',槍:'C',兵:'S'}, stats:{武:81,防:88,計:38,速:55}},
+  {id:'suncon',      n:'孫堅',   f:'呉',c:6,star:5,fx:'孫堅の挑発強撃',        fxsk:'fx_suncon',     pid:'379668110233321051', troops:{騎:'S',盾:'C',弓:'A',槍:'B',兵:'S'}, stats:{武:82,防:87,計:59,速:33}},
+  {id:'chengpu',     n:'程普',   f:'呉',c:5,star:5,fx:'程普の主将強化回復策',  fxsk:'fx_chengpu',    pid:'379668216550538843', troops:{騎:'B',盾:'C',弓:'A',槍:'A',兵:'S'}, stats:{武:56,防:75,計:56,速:31}},
+  {id:'lvmeng',      n:'呂蒙',   f:'呉',c:6,star:5,fx:'呂蒙の強化全秘謀術',    fxsk:'fx_lvmeng',     pid:'379668307046830493', troops:{騎:'S',盾:'B',弓:'C',槍:'A',兵:'S'}, stats:{武:79,防:66,計:86,速:30}},
+  {id:'xiaohu',      n:'小虎',   f:'呉',c:5,star:5,fx:'小虎の混乱鬼謀',        fxsk:'fx_xiaohu',     pid:'379669692459023748', troops:{騎:'S',盾:'A',弓:'C',槍:'S',兵:'B'}, stats:{武:39,防:53,計:64,速:63}},
+  {id:'ganning',     n:'甘寧',   f:'呉',c:6,star:5,fx:'甘寧の双撃',            fxsk:'fx_ganning',    pid:'379669829226919398', troops:{騎:'B',盾:'A',弓:'C',槍:'A',兵:'S'}, stats:{武:88,防:60,計:38,速:77}},
+  {id:'zhangfei',    n:'張飛',   f:'蜀',c:6,star:5,fx:'張飛の烈撃',            fxsk:'fx_zhangfei',   pid:'379670007736490104', troops:{騎:'C',盾:'A',弓:'A',槍:'C',兵:'S'}, stats:{武:90,防:74,計:30,速:68}},
+  {id:'huangzhong',  n:'黄忠',   f:'蜀',c:6,star:5,fx:'黄忠の強撃',            fxsk:'fx_huangzhong', pid:'379670418107162354', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'B'}, stats:{武:88,防:70,計:56,速:47}},
+  {id:'xushu',       n:'徐庶',   f:'蜀',c:5,star:5,fx:'徐庶の双鬼謀',          fxsk:'fx_xushu',      pid:'379670515163366245', troops:{騎:'A',盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:30,防:65,計:83,速:40}},
+  {id:'pantong',     n:'龐統',   f:'蜀',c:6,star:5,fx:'龐統の火計全鬼謀',      fxsk:'fx_pantong',    pid:'379671375012430168', troops:{騎:'A',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:39,防:69,計:88,速:64}},
+  {id:'wangyue',     n:'王悦',   f:'蜀',c:5,star:5,fx:'王悦の渾身双撃',        fxsk:'fx_wangyue',    pid:'379671468830638153', troops:{騎:'C',盾:'S',弓:'C',槍:'C',兵:'S'}, stats:{武:80,防:58,計:44,速:37}},
+  {id:'diaochan',    n:'貂蝉',   f:'他',c:6,star:5,fx:'貂蝉の混乱術',          fxsk:'fx_diaochan',   pid:'379671551206777879', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:31,防:80,計:64,速:86}},
+  {id:'huaxiong',    n:'華雄',   f:'他',c:5,star:5,fx:'華雄の強撃',            fxsk:'fx_huaxiong',   pid:'379671814927827017', troops:{騎:'C',盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:83,防:53,計:41,速:41}},
+  {id:'yuanshao',    n:'袁紹',   f:'他',c:6,star:5,fx:'袁紹の強化策',          fxsk:'fx_yuanshao',   pid:'379672125373415768', troops:{騎:'S',盾:'A',弓:'S',槍:'A',兵:'C'}, stats:{武:66,防:72,計:66,速:58}},
+  {id:'wangyi',      n:'王異',   f:'他',c:5,star:5,fx:'王異の双撃',            fxsk:'fx_wangyi',     pid:'379672216322767942', troops:{騎:'C',盾:'S',弓:'S',槍:'C',兵:'C'}, stats:{武:63,防:82,計:30,速:41}},
+  {id:'gongsunzan',  n:'公孫瓚', f:'他',c:6,star:5,fx:'公孫瓚の双撃',          fxsk:'fx_gongsunzan', pid:'379672928918201367', troops:{騎:'B',盾:'S',弓:'A',槍:'C',兵:'C'}, stats:{武:78,防:55,計:41,速:89}},
   // ── 星5 内政武将 ──
   {id:'xunyu',       n:'荀彧',        f:'魏',c:0, star:5, fx:'銅銭増産・伍',            fxsk:'sk5_xunyu',      pid:'379666974784942247'},
   {id:'zhenji',      n:'甄姫',        f:'魏',c:0, star:5, fx:'市場の技術・伍',          fxsk:'sk5_zhenji',     pid:'379667331535651193'},
@@ -515,52 +531,52 @@ var GENERALS = [
   {id:'liru',        n:'李儒',        f:'他',c:0, star:5, fx:'木材増産・伍',            fxsk:'sk5_liru',       pid:'379671732014857253'},
   {id:'zoushi',      n:'鄒氏',        f:'他',c:0, star:5, fx:'魅力の才・伍',            fxsk:'sk5_zoushi',     pid:'379671949984445828'},
   // ── 星5 追加・コラボ武将 ──
-  {id:'huangyy',     n:'黄月英',       f:'蜀',c:6,star:5,fx:'黄月英の雷鳴双鬼謀',    fxsk:'fx_huangyy',    pid:'398085649791479429', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:39,防:74,計:86,速:72}},
-  {id:'yanliang',    n:'顔良',         f:'他',c:5,star:5,fx:'顔良の武力弱化双撃',    fxsk:'fx_yanliang',   pid:'400115044689399648', troops:{盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:85,防:68,計:46,速:55}},
-  {id:'wenchou',     n:'文醜',         f:'他',c:5,star:5,fx:'文醜の防御弱化双撃',    fxsk:'fx_wenchou',    pid:'400115610014509616', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:85,防:60,計:46,速:63}},
-  {id:'fazheng',     n:'法正',         f:'蜀',c:6,star:5,fx:'法正の全鬼謀',          fxsk:'fx_fazheng',    pid:'402138739142355799', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:39,防:65,計:88,速:72}},
-  {id:'lyushi_ny',   n:'謹賀新年呂氏', f:'他',c:6,star:5,fx:'呂氏の強化策',          fxsk:'fx_lyushi_ny',  pid:'402857981680599492', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:65,防:75,計:45,速:60}},
-  {id:'huanggai',    n:'黄蓋',         f:'呉',c:6,star:5,fx:'黄蓋の全火計',          fxsk:'fx_huanggai',   pid:'405188554063371826', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:72,防:70,計:85,速:63}},
-  {id:'yujin5',      n:'五将軍于禁',   f:'魏',c:6,star:5,fx:'于禁の全体弱化策',      fxsk:'fx_yujin5',     pid:'407206029504330733', troops:{盾:'S',弓:'A',槍:'B',兵:'A'}, stats:{武:65,防:80,計:78,速:55}},
-  {id:'handan',      n:'韓当',         f:'呉',c:6,star:5,fx:'韓当の襲火強撃',        fxsk:'fx_handan',     pid:'409235931778812419', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:90,防:72,計:55,速:70}},
-  {id:'lvmengzm',    n:'呂蒙子明',     f:'呉',c:6,star:5,fx:'呂蒙子明の弱化強撃',    fxsk:'fx_lvmengzm',   pid:'411282304900570871', troops:{盾:'B',弓:'A',槍:'S',兵:'A'}, stats:{武:85,防:70,計:65,速:72}},
-  {id:'guanyun',     n:'関羽雲長',     f:'蜀',c:7,star:5,fx:'関羽雲長の雷鳴強撃',    fxsk:'fx_guanyun',    pid:'411282482319609776', troops:{盾:'S',弓:'A',槍:'B',兵:'S'}, stats:{武:95,防:78,計:55,速:70}},
-  {id:'lvbu_bosen',  n:'呂布奉先',     f:'他',c:7,star:5,fx:'呂布奉先の三乱撃',      fxsk:'fx_lvbu_bosen', pid:'411282601437841586', troops:{盾:'S',弓:'C',槍:'A',兵:'S'}, stats:{武:100,防:82,計:35,速:88}},
+  {id:'huangyy',     n:'黄月英',       f:'蜀',c:6,star:5,fx:'黄月英の雷鳴双鬼謀',    fxsk:'fx_huangyy',    pid:'398085649791479429', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:39,防:74,計:86,速:72}},
+  {id:'yanliang',    n:'顔良',         f:'他',c:5,star:5,fx:'顔良の武力弱化双撃',    fxsk:'fx_yanliang',   pid:'400115044689399648', troops:{騎:'B',盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:85,防:68,計:46,速:55}},
+  {id:'wenchou',     n:'文醜',         f:'他',c:5,star:5,fx:'文醜の防御弱化双撃',    fxsk:'fx_wenchou',    pid:'400115610014509616', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:85,防:60,計:46,速:63}},
+  {id:'fazheng',     n:'法正',         f:'蜀',c:6,star:5,fx:'法正の全鬼謀',          fxsk:'fx_fazheng',    pid:'402138739142355799', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:39,防:65,計:88,速:72}},
+  {id:'lyushi_ny',   n:'謹賀新年呂氏', f:'他',c:6,star:5,fx:'呂氏の強化策',          fxsk:'fx_lyushi_ny',  pid:'402857981680599492', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:65,防:75,計:45,速:60}},
+  {id:'huanggai',    n:'黄蓋',         f:'呉',c:6,star:5,fx:'黄蓋の全火計',          fxsk:'fx_huanggai',   pid:'405188554063371826', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:72,防:70,計:85,速:63}},
+  {id:'yujin5',      n:'五将軍于禁',   f:'魏',c:6,star:5,fx:'于禁の全体弱化策',      fxsk:'fx_yujin5',     pid:'407206029504330733', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'A'}, stats:{武:65,防:80,計:78,速:55}},
+  {id:'handan',      n:'韓当',         f:'呉',c:6,star:5,fx:'韓当の襲火強撃',        fxsk:'fx_handan',     pid:'409235931778812419', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:90,防:72,計:55,速:70}},
+  {id:'lvmengzm',    n:'呂蒙子明',     f:'呉',c:6,star:5,fx:'呂蒙子明の弱化強撃',    fxsk:'fx_lvmengzm',   pid:'411282304900570871', troops:{騎:'A',盾:'B',弓:'A',槍:'S',兵:'A'}, stats:{武:85,防:70,計:65,速:72}},
+  {id:'guanyun',     n:'関羽雲長',     f:'蜀',c:7,star:5,fx:'関羽雲長の雷鳴強撃',    fxsk:'fx_guanyun',    pid:'411282482319609776', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'S'}, stats:{武:95,防:78,計:55,速:70}},
+  {id:'lvbu_bosen',  n:'呂布奉先',     f:'他',c:7,star:5,fx:'呂布奉先の三乱撃',      fxsk:'fx_lvbu_bosen', pid:'411282601437841586', troops:{騎:'C',盾:'S',弓:'C',槍:'A',兵:'S'}, stats:{武:100,防:82,計:35,速:88}},
   // ── 星4 戦闘武将 ──
-  {id:'yujin',       n:'于禁',   f:'魏',c:5,star:4,fx:'全体防御強化の策・四',  fxsk:'sk4_yujin',      pid:'392472509032749063', troops:{盾:'S',弓:'A',槍:'B',兵:'A'}, stats:{武:54,防:68,計:71,速:25}},
-  {id:'lidian',      n:'李典',   f:'魏',c:5,star:4,fx:'追撃の術・四',          fxsk:'sk4_lidian',     pid:'392472465445498254', troops:{盾:'C',弓:'B',槍:'B',兵:'S'}, stats:{武:70,防:53,計:63,速:33}},
-  {id:'zhuling',     n:'朱霊',   f:'魏',c:4,star:4,fx:'智将強化の策・四',      fxsk:'sk4_zhuling',    pid:'392472393102186503', troops:{盾:'A',弓:'B',槍:'A',兵:'C'}, stats:{武:46,防:42,計:45,速:40}},
-  {id:'caohua',      n:'曹華',   f:'魏',c:4,star:4,fx:'鉄壁強化の策・四',      fxsk:'sk4_caohua',     pid:'392472361795887840', troops:{盾:'C',弓:'S',槍:'B',兵:'B'}, stats:{武:31,防:63,計:46,速:38}},
-  {id:'guohuai',     n:'郭淮',   f:'魏',c:5,star:4,fx:'襲火の鬼謀・四',        fxsk:'sk4_guohuai',    pid:'392472329969522695', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:45,防:55,計:68,速:50}},
-  {id:'niujin',      n:'牛金',   f:'魏',c:4,star:4,fx:'挑発強撃・四',          fxsk:'sk4_niujin',     pid:'392472294670226697', troops:{盾:'S',弓:'C',槍:'B',兵:'A'}, stats:{武:65,防:55,計:30,速:45}},
-  {id:'caozhang',    n:'曹彰',   f:'魏',c:4,star:4,fx:'反撃の術・四',          fxsk:'sk4_caozhang',   pid:'392472126512188820', troops:{盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:60,防:58,計:30,速:50}},
-  {id:'caojie',      n:'曹節',   f:'魏',c:4,star:4,fx:'全鬼謀・四',            fxsk:'sk4_caojie',     pid:'392472228500886088', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:30,防:45,計:65,速:48}},
-  {id:'dongxi',      n:'董襲',   f:'呉',c:5,star:4,fx:'強撃・四',              fxsk:'sk4_dongxi',     pid:'392472095239450940', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:68,防:60,計:35,速:45}},
-  {id:'zhuhuan',     n:'朱桓',   f:'呉',c:5,star:4,fx:'全体速度強化の策・四',  fxsk:'sk4_zhuhuan',    pid:'392472018081083115', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:55,防:58,計:50,速:55}},
-  {id:'xusheng',     n:'徐盛',   f:'呉',c:5,star:4,fx:'双撃・四',              fxsk:'sk4_xusheng',    pid:'392471985013140878', troops:{盾:'B',弓:'A',槍:'S',兵:'B'}, stats:{武:70,防:55,計:40,速:55}},
-  {id:'zhanghao',    n:'張昭',   f:'呉',c:4,star:4,fx:'鬼謀・四',              fxsk:'sk4_zhanghao',   pid:'392471911428315143', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:30,防:45,計:72,速:50}},
-  {id:'ludai',       n:'呂岱',   f:'呉',c:4,star:4,fx:'駿足強化の策・四',      fxsk:'sk4_ludai',      pid:'392471840477441667', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:45,防:48,計:55,速:60}},
-  {id:'zhanghong',   n:'張紘',   f:'呉',c:4,star:4,fx:'双鬼謀・四',            fxsk:'sk4_zhanghong',  pid:'392471807023693716', troops:{盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:30,防:42,計:68,速:52}},
-  {id:'sunjiao',     n:'孫皎',   f:'呉',c:4,star:4,fx:'双武力弱化・四',        fxsk:'sk4_sunjiao',    pid:'392471771657322388', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:55,防:50,計:55,速:48}},
-  {id:'quancong',    n:'全琮',   f:'呉',c:4,star:4,fx:'武力弱化の強撃・四',    fxsk:'sk4_quancong',   pid:'392471734797785095', troops:{盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:65,防:52,計:40,速:55}},
-  {id:'liufeng',     n:'劉封',   f:'蜀',c:4,star:4,fx:'双防御弱化・四',        fxsk:'sk4_liufeng',    pid:'392471586336210112', troops:{盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:60,防:50,計:40,速:48}},
-  {id:'maliang',     n:'馬良',   f:'蜀',c:5,star:4,fx:'全体計略強化の策・四',  fxsk:'sk4_maliang',    pid:'392470184163600197', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:30,防:48,計:68,速:50}},
-  {id:'masu',        n:'馬謖',   f:'蜀',c:4,star:4,fx:'火計・四',              fxsk:'sk4_masu',       pid:'392470141297757236', troops:{盾:'C',弓:'S',槍:'B',兵:'A'}, stats:{武:30,防:42,計:70,速:52}},
-  {id:'madai',       n:'馬岱',   f:'蜀',c:5,star:4,fx:'全体挑発の回復策・四',  fxsk:'sk4_madai',      pid:'392463794627946831', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:55,防:60,計:50,速:55}},
-  {id:'shamoke',     n:'沙摩柯', f:'蜀',c:5,star:4,fx:'全体武力強化の策・四',  fxsk:'sk4_shamoke',    pid:'392463750956901983', troops:{盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:70,防:60,計:38,速:50}},
-  {id:'xiahoushi',   n:'夏侯氏', f:'蜀',c:4,star:4,fx:'全体持続回復の策・四',  fxsk:'sk4_xiahoushi',  pid:'392463458127342158', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:30,防:50,計:65,速:48}},
-  {id:'mifuren',     n:'糜夫人', f:'蜀',c:4,star:4,fx:'双回復・四',            fxsk:'sk4_mifuren',    pid:'392463419724326495', troops:{盾:'C',弓:'B',槍:'A',兵:'S'}, stats:{武:30,防:45,計:68,速:50}},
-  {id:'wangping',    n:'王平',   f:'蜀',c:4,star:4,fx:'双速度弱化・四',        fxsk:'sk4_wangping',   pid:'392462966336801613', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:52,防:55,計:45,速:55}},
-  {id:'hejin',       n:'何進',   f:'他',c:4,star:4,fx:'防御弱化の強撃・四',    fxsk:'sk4_hejin',      pid:'392462589755453163', troops:{盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:62,防:55,計:38,速:45}},
-  {id:'zhujun',      n:'朱儁',   f:'他',c:5,star:4,fx:'武力弱化の鬼謀・四',    fxsk:'sk4_zhujun',     pid:'392462431294609470', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:45,防:50,計:65,速:48}},
-  {id:'huangfusong', n:'皇甫嵩', f:'他',c:5,star:4,fx:'計略弱化の強撃・四',    fxsk:'sk4_huangfusong',pid:'392462385912270240', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:62,防:52,計:50,速:50}},
-  {id:'zhangliang',  n:'張梁',   f:'他',c:4,star:4,fx:'双計略弱化・四',        fxsk:'sk4_zhangliang', pid:'392461200971024311', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:35,防:45,計:68,速:50}},
-  {id:'zhangbao',    n:'張宝',   f:'他',c:4,star:4,fx:'防御弱化の鬼謀・四',    fxsk:'sk4_zhangbao',   pid:'392460742617523807', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:35,防:48,計:65,速:50}},
-  {id:'lyushi',      n:'呂氏',   f:'他',c:5,star:4,fx:'三乱撃・四',            fxsk:'sk4_lyushi',     pid:'392460705439154345', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:62,防:55,計:38,速:50}},
-  {id:'yuanshi',     n:'袁術',   f:'他',c:4,star:4,fx:'計略弱化の鬼謀・四',    fxsk:'sk4_yuanshi',    pid:'392460647859749033', troops:{盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:35,防:45,計:68,速:48}},
-  {id:'yuanji',      n:'袁姫',   f:'他',c:4,star:4,fx:'豪傑強化の策・四',      fxsk:'sk4_yuanji',     pid:'392460559041178693', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:50,防:52,計:50,速:50}},
-  {id:'shenpi',      n:'審配',   f:'他',c:4,star:4,fx:'速度弱化の鬼謀・四',    fxsk:'sk4_shenpi',     pid:'392460521426660421', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:35,防:48,計:65,速:50}},
-  {id:'zhangren',    n:'張任',   f:'他',c:4,star:4,fx:'速度弱化の強撃・四',    fxsk:'sk4_zhangren',   pid:'392460463075510199', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:62,防:50,計:42,速:55}},
+  {id:'yujin',       n:'于禁',   f:'魏',c:5,star:4,fx:'全体防御強化の策・四',  fxsk:'sk4_yujin',      pid:'392472509032749063', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'A'}, stats:{武:54,防:68,計:71,速:25}},
+  {id:'lidian',      n:'李典',   f:'魏',c:5,star:4,fx:'追撃の術・四',          fxsk:'sk4_lidian',     pid:'392472465445498254', troops:{騎:'A',盾:'C',弓:'B',槍:'B',兵:'S'}, stats:{武:70,防:53,計:63,速:33}},
+  {id:'zhuling',     n:'朱霊',   f:'魏',c:4,star:4,fx:'智将強化の策・四',      fxsk:'sk4_zhuling',    pid:'392472393102186503', troops:{騎:'S',盾:'A',弓:'B',槍:'A',兵:'C'}, stats:{武:46,防:42,計:45,速:40}},
+  {id:'caohua',      n:'曹華',   f:'魏',c:4,star:4,fx:'鉄壁強化の策・四',      fxsk:'sk4_caohua',     pid:'392472361795887840', troops:{騎:'B',盾:'C',弓:'S',槍:'B',兵:'B'}, stats:{武:31,防:63,計:46,速:38}},
+  {id:'guohuai',     n:'郭淮',   f:'魏',c:5,star:4,fx:'襲火の鬼謀・四',        fxsk:'sk4_guohuai',    pid:'392472329969522695', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:45,防:55,計:68,速:50}},
+  {id:'niujin',      n:'牛金',   f:'魏',c:4,star:4,fx:'挑発強撃・四',          fxsk:'sk4_niujin',     pid:'392472294670226697', troops:{騎:'A',盾:'S',弓:'C',槍:'B',兵:'A'}, stats:{武:65,防:55,計:30,速:45}},
+  {id:'caozhang',    n:'曹彰',   f:'魏',c:4,star:4,fx:'反撃の術・四',          fxsk:'sk4_caozhang',   pid:'392472126512188820', troops:{騎:'B',盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:60,防:58,計:30,速:50}},
+  {id:'caojie',      n:'曹節',   f:'魏',c:4,star:4,fx:'全鬼謀・四',            fxsk:'sk4_caojie',     pid:'392472228500886088', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:30,防:45,計:65,速:48}},
+  {id:'dongxi',      n:'董襲',   f:'呉',c:5,star:4,fx:'強撃・四',              fxsk:'sk4_dongxi',     pid:'392472095239450940', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:68,防:60,計:35,速:45}},
+  {id:'zhuhuan',     n:'朱桓',   f:'呉',c:5,star:4,fx:'全体速度強化の策・四',  fxsk:'sk4_zhuhuan',    pid:'392472018081083115', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:55,防:58,計:50,速:55}},
+  {id:'xusheng',     n:'徐盛',   f:'呉',c:5,star:4,fx:'双撃・四',              fxsk:'sk4_xusheng',    pid:'392471985013140878', troops:{騎:'A',盾:'B',弓:'A',槍:'S',兵:'B'}, stats:{武:70,防:55,計:40,速:55}},
+  {id:'zhanghao',    n:'張昭',   f:'呉',c:4,star:4,fx:'鬼謀・四',              fxsk:'sk4_zhanghao',   pid:'392471911428315143', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:30,防:45,計:72,速:50}},
+  {id:'ludai',       n:'呂岱',   f:'呉',c:4,star:4,fx:'駿足強化の策・四',      fxsk:'sk4_ludai',      pid:'392471840477441667', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:45,防:48,計:55,速:60}},
+  {id:'zhanghong',   n:'張紘',   f:'呉',c:4,star:4,fx:'双鬼謀・四',            fxsk:'sk4_zhanghong',  pid:'392471807023693716', troops:{騎:'B',盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:30,防:42,計:68,速:52}},
+  {id:'sunjiao',     n:'孫皎',   f:'呉',c:4,star:4,fx:'双武力弱化・四',        fxsk:'sk4_sunjiao',    pid:'392471771657322388', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:55,防:50,計:55,速:48}},
+  {id:'quancong',    n:'全琮',   f:'呉',c:4,star:4,fx:'武力弱化の強撃・四',    fxsk:'sk4_quancong',   pid:'392471734797785095', troops:{騎:'C',盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:65,防:52,計:40,速:55}},
+  {id:'liufeng',     n:'劉封',   f:'蜀',c:4,star:4,fx:'双防御弱化・四',        fxsk:'sk4_liufeng',    pid:'392471586336210112', troops:{騎:'C',盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:60,防:50,計:40,速:48}},
+  {id:'maliang',     n:'馬良',   f:'蜀',c:5,star:4,fx:'全体計略強化の策・四',  fxsk:'sk4_maliang',    pid:'392470184163600197', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:30,防:48,計:68,速:50}},
+  {id:'masu',        n:'馬謖',   f:'蜀',c:4,star:4,fx:'火計・四',              fxsk:'sk4_masu',       pid:'392470141297757236', troops:{騎:'A',盾:'C',弓:'S',槍:'B',兵:'A'}, stats:{武:30,防:42,計:70,速:52}},
+  {id:'madai',       n:'馬岱',   f:'蜀',c:5,star:4,fx:'全体挑発の回復策・四',  fxsk:'sk4_madai',      pid:'392463794627946831', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:55,防:60,計:50,速:55}},
+  {id:'shamoke',     n:'沙摩柯', f:'蜀',c:5,star:4,fx:'全体武力強化の策・四',  fxsk:'sk4_shamoke',    pid:'392463750956901983', troops:{騎:'C',盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:70,防:60,計:38,速:50}},
+  {id:'xiahoushi',   n:'夏侯氏', f:'蜀',c:4,star:4,fx:'全体持続回復の策・四',  fxsk:'sk4_xiahoushi',  pid:'392463458127342158', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:30,防:50,計:65,速:48}},
+  {id:'mifuren',     n:'糜夫人', f:'蜀',c:4,star:4,fx:'双回復・四',            fxsk:'sk4_mifuren',    pid:'392463419724326495', troops:{騎:'S',盾:'C',弓:'B',槍:'A',兵:'S'}, stats:{武:30,防:45,計:68,速:50}},
+  {id:'wangping',    n:'王平',   f:'蜀',c:4,star:4,fx:'双速度弱化・四',        fxsk:'sk4_wangping',   pid:'392462966336801613', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:52,防:55,計:45,速:55}},
+  {id:'hejin',       n:'何進',   f:'他',c:4,star:4,fx:'防御弱化の強撃・四',    fxsk:'sk4_hejin',      pid:'392462589755453163', troops:{騎:'C',盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:62,防:55,計:38,速:45}},
+  {id:'zhujun',      n:'朱儁',   f:'他',c:5,star:4,fx:'武力弱化の鬼謀・四',    fxsk:'sk4_zhujun',     pid:'392462431294609470', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:45,防:50,計:65,速:48}},
+  {id:'huangfusong', n:'皇甫嵩', f:'他',c:5,star:4,fx:'計略弱化の強撃・四',    fxsk:'sk4_huangfusong',pid:'392462385912270240', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:62,防:52,計:50,速:50}},
+  {id:'zhangliang',  n:'張梁',   f:'他',c:4,star:4,fx:'双計略弱化・四',        fxsk:'sk4_zhangliang', pid:'392461200971024311', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:35,防:45,計:68,速:50}},
+  {id:'zhangbao',    n:'張宝',   f:'他',c:4,star:4,fx:'防御弱化の鬼謀・四',    fxsk:'sk4_zhangbao',   pid:'392460742617523807', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:35,防:48,計:65,速:50}},
+  {id:'lyushi',      n:'呂氏',   f:'他',c:5,star:4,fx:'三乱撃・四',            fxsk:'sk4_lyushi',     pid:'392460705439154345', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:62,防:55,計:38,速:50}},
+  {id:'yuanshi',     n:'袁術',   f:'他',c:4,star:4,fx:'計略弱化の鬼謀・四',    fxsk:'sk4_yuanshi',    pid:'392460647859749033', troops:{騎:'B',盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:35,防:45,計:68,速:48}},
+  {id:'yuanji',      n:'袁姫',   f:'他',c:4,star:4,fx:'豪傑強化の策・四',      fxsk:'sk4_yuanji',     pid:'392460559041178693', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:50,防:52,計:50,速:50}},
+  {id:'shenpi',      n:'審配',   f:'他',c:4,star:4,fx:'速度弱化の鬼謀・四',    fxsk:'sk4_shenpi',     pid:'392460521426660421', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:35,防:48,計:65,速:50}},
+  {id:'zhangren',    n:'張任',   f:'他',c:4,star:4,fx:'速度弱化の強撃・四',    fxsk:'sk4_zhangren',   pid:'392460463075510199', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:62,防:50,計:42,速:55}},
   // ── 星4 内政武将 ──
   {id:'bianfuren',   n:'卞夫人',      f:'魏',c:0, star:4, fx:'魅力の才・四',            fxsk:'sk4_bianfuren',  pid:'392472262575446023'},
   {id:'dingfuren',   n:'丁夫人',      f:'魏',c:0, star:4, fx:'木材収集・四',            fxsk:'sk4_dingfuren',  pid:'392472189426784263'},
@@ -575,29 +591,29 @@ var GENERALS = [
   {id:'liubiao',     n:'劉表',        f:'他',c:0, star:4, fx:'政治の才・四',            fxsk:'sk4_liubiao',    pid:'392462299929032234'},
   {id:'zhangsong',   n:'張松',        f:'他',c:0, star:4, fx:'糧食収集・四',            fxsk:'sk4_zhangsong',  pid:'392461244893818603'},
   // ── 星3 戦闘武将 ──
-  {id:'wangshuang',  n:'王双',   f:'魏',c:4,star:3,fx:'全体武力強化の策・三',  fxsk:'sk3_wangshuang', pid:'392435307703734049', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:55,防:45,計:30,速:40}},
-  {id:'zhangyin',    n:'張允',   f:'魏',c:3,star:3,fx:'強撃・三',              fxsk:'sk3_zhangyin',   pid:'392435226602687207', troops:{盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:52,防:40,計:25,速:38}},
-  {id:'xiahouen',    n:'夏侯恩', f:'魏',c:4,star:3,fx:'全体計略強化の策・三',  fxsk:'sk3_xiahouen',   pid:'392435184777076748', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:25,防:40,計:55,速:42}},
-  {id:'sunkuang',    n:'孫匡',   f:'呉',c:3,star:3,fx:'鬼謀・三',              fxsk:'sk3_sunkuang',   pid:'392435102468066023', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:25,防:38,計:52,速:42}},
-  {id:'zhuju',       n:'朱拠',   f:'呉',c:3,star:3,fx:'防御弱化の強撃・三',    fxsk:'sk3_zhuju',      pid:'392435050525755221', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:48,防:40,計:30,速:45}},
-  {id:'sufei',       n:'蘇飛',   f:'呉',c:3,star:3,fx:'双防御弱化・三',        fxsk:'sk3_sufei',      pid:'392434981655286932', troops:{盾:'C',弓:'A',槍:'B',兵:'S'}, stats:{武:50,防:38,計:30,速:45}},
-  {id:'jiangqin',    n:'蒋欽',   f:'呉',c:3,star:3,fx:'全体防御強化の策・三',  fxsk:'sk3_jiangqin',   pid:'392434848276466896', troops:{盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:30,防:50,計:40,速:38}},
-  {id:'lingcao',     n:'凌操',   f:'呉',c:4,star:3,fx:'双計略弱化・三',        fxsk:'sk3_lingcao',    pid:'392434809101627062', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:30,防:38,計:50,速:42}},
-  {id:'zhiran',      n:'朱然',   f:'呉',c:4,star:3,fx:'武力弱化の鬼謀・三',    fxsk:'sk3_zhiran',     pid:'392434575529261915', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:30,防:38,計:52,速:42}},
-  {id:'zhangyi',     n:'張嶷',   f:'蜀',c:4,star:3,fx:'全体速度強化の策・三',  fxsk:'sk3_zhangyi',    pid:'392434361854643408', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:40,防:40,計:38,速:52}},
-  {id:'liaohwa',     n:'廖化',   f:'蜀',c:3,star:3,fx:'武力弱化の強撃・三',    fxsk:'sk3_liaohwa',    pid:'392434317747291989', troops:{盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:50,防:42,計:28,速:40}},
-  {id:'mazhong',     n:'馬忠',   f:'蜀',c:4,star:3,fx:'双撃・三',              fxsk:'sk3_mazhong',    pid:'392434271744165717', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:52,防:40,計:30,速:42}},
-  {id:'dingyuan',    n:'丁原',   f:'他',c:4,star:3,fx:'双鬼謀・三',            fxsk:'sk3_dingyuan',   pid:'392434167440250043', troops:{盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:28,防:38,計:52,速:45}},
-  {id:'baoxin',      n:'鮑信',   f:'他',c:4,star:3,fx:'計略弱化の鬼謀・三',    fxsk:'sk3_baoxin',     pid:'392434118752783568', troops:{盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:28,防:38,計:50,速:42}},
-  {id:'hanshui',     n:'韓遂',   f:'他',c:4,star:3,fx:'速度弱化の鬼謀・三',    fxsk:'sk3_hanshui',    pid:'392433922979399509', troops:{盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:28,防:38,計:50,速:42}},
-  {id:'huangzu',     n:'黄祖',   f:'他',c:3,star:3,fx:'防御弱化の鬼謀・三',    fxsk:'sk3_huangzu',    pid:'392433735410182125', troops:{盾:'A',弓:'S',槍:'C',兵:'B'}, stats:{武:28,防:38,計:50,速:40}},
-  {id:'chunyuqiong', n:'淳于瓊', f:'他',c:3,star:3,fx:'計略弱化の強撃・三',    fxsk:'sk3_chunyuqiong',pid:'392433631928303978', troops:{盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:50,防:42,計:28,速:38}},
-  {id:'mayuanyi',    n:'馬元義', f:'他',c:3,star:3,fx:'追撃の術・三',          fxsk:'sk3_mayuanyi',   pid:'392428682112705016', troops:{盾:'B',弓:'A',槍:'C',兵:'S'}, stats:{武:52,防:40,計:28,速:42}},
-  {id:'bocai',       n:'波才',   f:'他',c:3,star:3,fx:'速度弱化の強撃・三',    fxsk:'sk3_bocai',      pid:'392428568732254885', troops:{盾:'A',弓:'C',槍:'B',兵:'S'}, stats:{武:50,防:38,計:28,速:45}},
-  {id:'lijue',       n:'李傕',   f:'他',c:3,star:3,fx:'双武力弱化・三',        fxsk:'sk3_lijue',      pid:'392428491439645176', troops:{盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:35,防:38,計:45,速:42}},
-  {id:'guosi',       n:'郭汜',   f:'他',c:3,star:3,fx:'三乱撃・三',            fxsk:'sk3_guosi',      pid:'392428410422474668', troops:{盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:50,防:38,計:28,速:40}},
-  {id:'ahuinan',     n:'阿会喃', f:'他',c:3,star:3,fx:'反撃の術・三',          fxsk:'sk3_ahuinan',    pid:'392428335579300801', troops:{盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:50,防:45,計:28,速:38}},
-  {id:'xurong',      n:'徐栄',   f:'他',c:3,star:3,fx:'双速度弱化・三',        fxsk:'sk3_xurong',     pid:'392428241895309989', troops:{盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:38,防:38,計:38,速:50}},
+  {id:'wangshuang',  n:'王双',   f:'魏',c:4,star:3,fx:'全体武力強化の策・三',  fxsk:'sk3_wangshuang', pid:'392435307703734049', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:55,防:45,計:30,速:40}},
+  {id:'zhangyin',    n:'張允',   f:'魏',c:3,star:3,fx:'強撃・三',              fxsk:'sk3_zhangyin',   pid:'392435226602687207', troops:{騎:'S',盾:'A',弓:'B',槍:'C',兵:'S'}, stats:{武:52,防:40,計:25,速:38}},
+  {id:'xiahouen',    n:'夏侯恩', f:'魏',c:4,star:3,fx:'全体計略強化の策・三',  fxsk:'sk3_xiahouen',   pid:'392435184777076748', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:25,防:40,計:55,速:42}},
+  {id:'sunkuang',    n:'孫匡',   f:'呉',c:3,star:3,fx:'鬼謀・三',              fxsk:'sk3_sunkuang',   pid:'392435102468066023', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:25,防:38,計:52,速:42}},
+  {id:'zhuju',       n:'朱拠',   f:'呉',c:3,star:3,fx:'防御弱化の強撃・三',    fxsk:'sk3_zhuju',      pid:'392435050525755221', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:48,防:40,計:30,速:45}},
+  {id:'sufei',       n:'蘇飛',   f:'呉',c:3,star:3,fx:'双防御弱化・三',        fxsk:'sk3_sufei',      pid:'392434981655286932', troops:{騎:'S',盾:'C',弓:'A',槍:'B',兵:'S'}, stats:{武:50,防:38,計:30,速:45}},
+  {id:'jiangqin',    n:'蒋欽',   f:'呉',c:3,star:3,fx:'全体防御強化の策・三',  fxsk:'sk3_jiangqin',   pid:'392434848276466896', troops:{騎:'C',盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:30,防:50,計:40,速:38}},
+  {id:'lingcao',     n:'凌操',   f:'呉',c:4,star:3,fx:'双計略弱化・三',        fxsk:'sk3_lingcao',    pid:'392434809101627062', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:30,防:38,計:50,速:42}},
+  {id:'zhiran',      n:'朱然',   f:'呉',c:4,star:3,fx:'武力弱化の鬼謀・三',    fxsk:'sk3_zhiran',     pid:'392434575529261915', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:30,防:38,計:52,速:42}},
+  {id:'zhangyi',     n:'張嶷',   f:'蜀',c:4,star:3,fx:'全体速度強化の策・三',  fxsk:'sk3_zhangyi',    pid:'392434361854643408', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:40,防:40,計:38,速:52}},
+  {id:'liaohwa',     n:'廖化',   f:'蜀',c:3,star:3,fx:'武力弱化の強撃・三',    fxsk:'sk3_liaohwa',    pid:'392434317747291989', troops:{騎:'B',盾:'S',弓:'A',槍:'C',兵:'B'}, stats:{武:50,防:42,計:28,速:40}},
+  {id:'mazhong',     n:'馬忠',   f:'蜀',c:4,star:3,fx:'双撃・三',              fxsk:'sk3_mazhong',    pid:'392434271744165717', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:52,防:40,計:30,速:42}},
+  {id:'dingyuan',    n:'丁原',   f:'他',c:4,star:3,fx:'双鬼謀・三',            fxsk:'sk3_dingyuan',   pid:'392434167440250043', troops:{騎:'C',盾:'A',弓:'S',槍:'B',兵:'C'}, stats:{武:28,防:38,計:52,速:45}},
+  {id:'baoxin',      n:'鮑信',   f:'他',c:4,star:3,fx:'計略弱化の鬼謀・三',    fxsk:'sk3_baoxin',     pid:'392434118752783568', troops:{騎:'B',盾:'C',弓:'A',槍:'S',兵:'B'}, stats:{武:28,防:38,計:50,速:42}},
+  {id:'hanshui',     n:'韓遂',   f:'他',c:4,star:3,fx:'速度弱化の鬼謀・三',    fxsk:'sk3_hanshui',    pid:'392433922979399509', troops:{騎:'C',盾:'B',弓:'S',槍:'A',兵:'C'}, stats:{武:28,防:38,計:50,速:42}},
+  {id:'huangzu',     n:'黄祖',   f:'他',c:3,star:3,fx:'防御弱化の鬼謀・三',    fxsk:'sk3_huangzu',    pid:'392433735410182125', troops:{騎:'B',盾:'A',弓:'S',槍:'C',兵:'B'}, stats:{武:28,防:38,計:50,速:40}},
+  {id:'chunyuqiong', n:'淳于瓊', f:'他',c:3,star:3,fx:'計略弱化の強撃・三',    fxsk:'sk3_chunyuqiong',pid:'392433631928303978', troops:{騎:'C',盾:'S',弓:'A',槍:'B',兵:'C'}, stats:{武:50,防:42,計:28,速:38}},
+  {id:'mayuanyi',    n:'馬元義', f:'他',c:3,star:3,fx:'追撃の術・三',          fxsk:'sk3_mayuanyi',   pid:'392428682112705016', troops:{騎:'S',盾:'B',弓:'A',槍:'C',兵:'S'}, stats:{武:52,防:40,計:28,速:42}},
+  {id:'bocai',       n:'波才',   f:'他',c:3,star:3,fx:'速度弱化の強撃・三',    fxsk:'sk3_bocai',      pid:'392428568732254885', troops:{騎:'S',盾:'A',弓:'C',槍:'B',兵:'S'}, stats:{武:50,防:38,計:28,速:45}},
+  {id:'lijue',       n:'李傕',   f:'他',c:3,star:3,fx:'双武力弱化・三',        fxsk:'sk3_lijue',      pid:'392428491439645176', troops:{騎:'B',盾:'C',弓:'S',槍:'A',兵:'B'}, stats:{武:35,防:38,計:45,速:42}},
+  {id:'guosi',       n:'郭汜',   f:'他',c:3,star:3,fx:'三乱撃・三',            fxsk:'sk3_guosi',      pid:'392428410422474668', troops:{騎:'C',盾:'A',弓:'B',槍:'S',兵:'C'}, stats:{武:50,防:38,計:28,速:40}},
+  {id:'ahuinan',     n:'阿会喃', f:'他',c:3,star:3,fx:'反撃の術・三',          fxsk:'sk3_ahuinan',    pid:'392428335579300801', troops:{騎:'C',盾:'S',弓:'B',槍:'A',兵:'C'}, stats:{武:50,防:45,計:28,速:38}},
+  {id:'xurong',      n:'徐栄',   f:'他',c:3,star:3,fx:'双速度弱化・三',        fxsk:'sk3_xurong',     pid:'392428241895309989', troops:{騎:'C',盾:'B',弓:'A',槍:'S',兵:'C'}, stats:{武:38,防:38,計:38,速:50}},
   // ── 星3 内政武将 ──
   {id:'maojie',      n:'毛玠',        f:'魏',c:0, star:3, fx:'石材収集・三',            fxsk:'sk3_maojie',     pid:'392435267572633377'},
   {id:'zhanglu',     n:'張魯',        f:'魏',c:0, star:3, fx:'糧食収集・三',            fxsk:'sk3_zhanglu',    pid:'392428073116533697'},
@@ -1155,7 +1171,7 @@ function renderGgrid(){
     if(gFil!=='all'&&g.f!==gFil) continue;
     var own=ownedG[g.id]?' owned':'';
     var avId='av-g-'+g.id;
-    html+='<div class="gcard'+own+'" onclick="toggleG(\''+g.id+'\')">'
+    html+='<div class="gcard'+own+'" data-star="'+g.star+'" onclick="toggleG(\''+g.id+'\')">'
         +'<div class="ck">✓</div>'
         +mkAvAsync(g.n,g.f,'lg',g,avId)
         +'<div class="gc-name">'+g.n+'</div>'
@@ -1167,7 +1183,7 @@ function renderGgrid(){
           +'<span style="font-size:8px;color:#58627a">速<b style="color:#18202e">'+g.stats.速+'</b></span>'
           +'</div>':'')
         +(g.troops?'<div class="gc-troops">'
-          +['盾','弓','槍','兵'].map(function(t){
+          +['騎','盾','弓','槍','兵'].map(function(t){
             var r=g.troops[t]||'-';
             return '<span class="gc-troop tr'+r+'"><span class="gc-tname">'+t+'</span><span class="gc-trank">'+r+'</span></span>';
           }).join('')
@@ -1177,6 +1193,13 @@ function renderGgrid(){
   grid.innerHTML=html||'<div class="nomsg">該当なし</div>';
   var cnt=0; for(var k in ownedG) if(ownedG[k]) cnt++;
   document.getElementById('gcnt').textContent='所持: '+cnt+'/'+GENERALS.length;
+  // re-apply low filter
+  var chk=document.getElementById('chk-show-low');
+  if(chk&&!chk.checked){
+    grid.querySelectorAll('.gcard[data-star]').forEach(function(el){
+      if(parseInt(el.dataset.star,10)<=4) el.style.display='none';
+    });
+  }
 }
 function fG(f,el){
   gFil=f;
@@ -1206,7 +1229,7 @@ function renderSgrid(){
     var s=SKILLS[i];
     if(sFil!=='all'&&String(s.lv)!==sFil) continue;
     var own=ownedS[s.id]?' owned':'';
-    html+='<div class="scard'+own+'" onclick="toggleS(\''+s.id+'\')">'
+    html+='<div class="scard'+own+'" data-lv="'+s.lv+'" onclick="toggleS(\''+s.id+'\')">'
         +'<div class="ck">✓</div>'
         +'<div class="sc-name">'+s.n+'</div>'
         +'<div class="sc-row">'+lvTag(s.lv)+stypeHtml(s.tp)+'</div>'
@@ -1217,6 +1240,13 @@ function renderSgrid(){
   grid.innerHTML=html||'<div class="nomsg">該当なし</div>';
   var cnt=0; for(var k in ownedS) if(ownedS[k]) cnt++;
   document.getElementById('scnt').textContent='所持: '+cnt+'/'+SKILLS.length;
+  // re-apply low filter
+  var chk=document.getElementById('chk-show-low');
+  if(chk&&!chk.checked){
+    grid.querySelectorAll('.scard[data-lv]').forEach(function(el){
+      if(parseInt(el.dataset.lv,10)<=4) el.style.display='none';
+    });
+  }
 }
 function fS(v,el){
   sFil=v;
@@ -1259,7 +1289,7 @@ function renderDgrid(){
         +'<div class="dgc-name">'+g.n+'</div>'
         +'<div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:1px;">'+ftag(g.f)+ctag(g.c)+'</div>'
         +(g.troops?'<div class="dgc-troops">'
-          +['盾','弓','槍','兵'].map(function(t){
+          +['騎','盾','弓','槍','兵'].map(function(t){
             var r=g.troops[t]||'-';
             return '<span class="dgc-troop tr'+r+'">'+t+r+'</span>';
           }).join('')
@@ -1822,9 +1852,9 @@ function shareDiscord(){
         ctx.textBaseline = 'middle';
         ctx.fillText('兵種：', sx+SQ_PAD, rowY+TROOP_H/2);
         var tbx = sx+SQ_PAD+ctx.measureText('兵種：').width+6;
-        ['盾','弓','槍','兵'].forEach(function(t){
+        ['騎','盾','弓','槍','兵'].forEach(function(t){
           var on = (q.troop===t);
-          var troopColor = {'盾':'#1d4ed8','弓':'#16a34a','槍':'#b45309','兵':'#374151'};
+          var troopColor = {'騎':'#7c3aed','盾':'#1d4ed8','弓':'#16a34a','槍':'#b45309','兵':'#374151'};
           var bg2 = on ? troopColor[t] : C.white;
           var fg2 = on ? '#fff' : C.tx2;
           var bdr = on ? null : C.bd;
@@ -1956,7 +1986,7 @@ function shareDiscord(){
           // 兵種適性
           if(g.troops){
             var trW2 = Math.floor(innerW/4);
-            ['盾','弓','槍','兵'].forEach(function(t,ti){
+            ['騎','盾','弓','槍','兵'].forEach(function(t,ti){
               var r = g.troops[t]||'C';
               var trX = innerX + ti*trW2;
               var trColors = {
@@ -2111,7 +2141,7 @@ function renderSquads(){
 
     // 兵種選択バー（部隊単位）
     var troopBar='<div class="sq-troop-bar"><span class="sq-troop-lbl">兵種：</span>';
-    ['盾','弓','槍','兵'].forEach(function(t){
+    ['騎','盾','弓','槍','兵'].forEach(function(t){
       var on=(q.troop===t)?' on t'+t:'';
       troopBar+='<button class="tbtn'+on+'" onclick="setTroop('+q.id+',\''+t+'\')">'+t+'</button>';
     });
@@ -2163,7 +2193,7 @@ function renderSlot(qid,si,slot,sqTroop){
   var troopRanksHtml='';
   if(g.troops){
     troopRanksHtml='<div class="troop-ranks">';
-    ['盾','弓','槍','兵'].forEach(function(t){
+    ['騎','盾','弓','槍','兵'].forEach(function(t){
       var r=g.troops[t]||'C';
       var isSelected=(sqTroop===t);
       var cls;
@@ -2304,6 +2334,27 @@ document.getElementById('ov').addEventListener('click',function(e){ if(e.target=
 /* ================================================================
    INIT
 ================================================================ */
+/* ================================================================
+   LOW STAR FILTER
+================================================================ */
+function applyLowFilter(){
+  var show = document.getElementById('chk-show-low').checked;
+  // generals
+  document.getElementById('ggrid').querySelectorAll('.gcard[data-star]').forEach(function(el){
+    var s=parseInt(el.dataset.star,10);
+    if(s<=4){ el.style.display=show?'':'none'; }
+  });
+  // skills
+  document.getElementById('sgrid').querySelectorAll('.scard[data-lv]').forEach(function(el){
+    var lv=parseInt(el.dataset.lv,10);
+    if(lv<=4){ el.style.display=show?'':'none'; }
+  });
+  // update counts
+  var gcnt=document.getElementById('gcnt');
+  var cnt=0; for(var k in ownedG) if(ownedG[k]) cnt++;
+  gcnt.textContent='所持: '+cnt+'/'+GENERALS.length;
+}
+
 // クッキーからデータを復元（なければデフォルト状態を使用）
 loadState();
 ensureSquad();
