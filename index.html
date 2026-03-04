@@ -81,7 +81,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .rSS{background:#6d28d9;color:#fff;}.rSp{background:#be185d;color:#fff;}
 .rS{background:#b45309;color:#fff;}.rA{background:#1d4ed8;color:#fff;}
 .rB{background:#374151;color:#fff;}.rC{background:#6b7280;color:#fff;}
-.ftag{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;color:#fff;display:inline-block;line-height:1.4;}
+.ftag{font-size:9px;font-weight:700;padding:0;border-radius:3px;color:#fff;display:inline-flex;align-items:center;justify-content:center;line-height:1;width:22px;height:18px;flex-shrink:0;}
 .f魏{background:var(--wei);}.f呉{background:var(--wu);}.f蜀{background:var(--shu);}.f他{background:var(--oth);}
 .styp{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;display:inline-block;line-height:1.4;}
 .sta{background:#fee2e2;color:#b91c1c;}.stp{background:#fef3c7;color:#92400e;}.sts{background:#cffafe;color:#0e7490;}
@@ -199,10 +199,10 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 /* ── PLACED GENERAL ── */
 .placed{border:2px solid var(--bd);border-radius:var(--rs);padding:8px;background:var(--sur2);position:relative;}
 .placed.over{border-color:var(--red);background:#fff7f7;}
-.pg-top{display:flex;gap:7px;align-items:flex-start;margin-bottom:7px;}
+.pg-top{display:flex;gap:7px;align-items:center;margin-bottom:7px;}
 .pg-info{flex:1;min-width:0;}
 .pg-nm{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pg-tags{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;}
+.pg-tags{display:flex;gap:3px;align-items:center;margin-top:3px;flex-wrap:wrap;}
 .pg-rm{position:absolute;top:4px;right:4px;width:17px;height:17px;border-radius:50%;background:none;border:1px solid var(--bd);color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .12s;line-height:1;}
 .pg-rm:hover{background:#ef4444;border-color:#ef4444;color:#fff;}
 
@@ -210,7 +210,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .skslots{display:flex;flex-direction:column;gap:3px;}
 .skrow{display:flex;gap:3px;align-items:center;width:100%;min-width:0;}
 .skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;white-space:nowrap;flex-shrink:0;line-height:1.5;width:38px;text-align:center;box-sizing:border-box;}
-.skbadge.fix{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
+.skbadge.fix{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;}
 .skbadge.lv5{background:var(--s5c);color:#fff;}
 .skbadge.lv4{background:var(--s4c);color:#fff;}
 .skbadge.lv3{background:var(--s3c);color:#fff;}
@@ -261,7 +261,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 
 /* ── COST TAG (replaces rank tag) ── */
 .ctag{font-size:10px;font-weight:800;padding:1px 5px;border-radius:3px;display:inline-block;line-height:1.4;background:#1e293b;color:#fff;}
-.ctag-lg{font-size:13px;font-weight:900;padding:2px 7px;border-radius:4px;background:#1e293b;color:#fff;}
+.ctag-lg{font-size:9px;font-weight:800;padding:0;border-radius:3px;background:#1e293b;color:#fff;display:inline-flex;align-items:center;justify-content:center;line-height:1;height:18px;min-width:28px;padding:0 4px;}
 
 /* ── BUTTON ── */
 .btn{padding:7px 15px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:600;transition:all .15s;}
@@ -292,18 +292,19 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 #share-preview .skslots{display:flex;flex-direction:column;gap:3px;}
 #share-preview .skrow{display:flex;gap:3px;align-items:center;}
 #share-preview .skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;width:38px;text-align:center;box-sizing:border-box;line-height:1.5;}
-#share-preview .skbadge.fix{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
+#share-preview .skbadge.fix{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;}
 #share-preview .skbadge.lv5{background:#d97706;color:#fff;}
 #share-preview .skbadge.lv4{background:#e11d48;color:#fff;}
 #share-preview .skbadge.lv3{background:#2563eb;color:#fff;}
 #share-preview .skbadge.sk-free{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
 #share-preview .skbtn-txt{flex:1;padding:2px 5px;border-radius:4px;font-size:9px;font-weight:600;background:#f1f5f9;color:#58627a;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-#share-preview .ftag{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;color:#fff;}
+#share-preview .ftag{font-size:9px;font-weight:700;padding:0;border-radius:3px;color:#fff;display:inline-flex;align-items:center;justify-content:center;line-height:1;width:22px;height:18px;flex-shrink:0;}
 #share-preview .f魏{background:#2563eb;}
 #share-preview .f呉{background:#dc2626;}
 #share-preview .f蜀{background:#16a34a;}
 #share-preview .f他{background:#7c3aed;}
 #share-preview .ctag-sm{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;background:#f1f5f9;color:#374151;}
+#share-preview .ctag-lg{font-size:9px;font-weight:800;padding:0 4px;border-radius:3px;background:#1e293b;color:#fff;display:inline-flex;align-items:center;justify-content:center;line-height:1;height:18px;min-width:28px;}
 #share-preview .fWei{background:linear-gradient(135deg,#1e40af,#3b82f6);}
 #share-preview .fWu{background:linear-gradient(135deg,#991b1b,#ef4444);}
 #share-preview .fShu{background:linear-gradient(135deg,#14532d,#22c55e);}
@@ -1813,8 +1814,8 @@ function shareDiscord(){
       lv5     : '#d97706',
       lv4     : '#e11d48',
       lv3     : '#2563eb',
-      fixbg   : '#f1f5f9',
-      fixtx   : '#475569',
+      fixbg   : '#f5f3ff',
+      fixtx   : '#5b21b6',
       freebg  : '#f1f5f9',
       freetx  : '#475569',
       // スキルタイプ別色（背景・文字）
@@ -2009,12 +2010,25 @@ function shareDiscord(){
         var tbx = sx+SQ_PAD+ctx.measureText('兵種：').width+6;
         ['騎','盾','弓','槍','兵'].forEach(function(t){
           var on = (q.troop===t);
-          var troopColor = {'騎':'#7c3aed','盾':'#1d4ed8','弓':'#16a34a','槍':'#b45309','兵':'#374151'};
-          var bg2 = on ? troopColor[t] : C.white;
-          var fg2 = on ? '#fff' : C.tx2;
-          var bdr = on ? null : C.bd;
-          roundRect(ctx, tbx, rowY+(TROOP_H-18)/2, 28, 18, 4, bg2, bdr);
-          ctx.fillStyle = fg2;
+          // UIと同じ：メンバー全員の適性最低ランクで色決定
+          var rankVal={'S':4,'A':3,'B':2,'C':1};
+          var ranks=[];
+          for(var si2=0;si2<q.slots.length;si2++){
+            var mg=q.slots[si2].g?findG(q.slots[si2].g):null;
+            if(mg&&mg.troops) ranks.push(mg.troops[t]||'C');
+          }
+          var qBg, qFg, qBd;
+          if(ranks.length>0){
+            var minVal=ranks.reduce(function(a,r){return Math.min(a,rankVal[r]||1);},4);
+            if(minVal>=4){      qBg=on?'#d97706':'#fffbeb'; qFg=on?'#fff':'#92400e'; qBd=on?null:'#d97706'; }
+            else if(minVal>=3){ qBg=on?'#e11d48':'#fff1f2'; qFg=on?'#fff':'#9f1239'; qBd=on?null:'#e11d48'; }
+            else if(minVal>=2){ qBg=on?'#2563eb':'#eff6ff'; qFg=on?'#fff':'#1e40af'; qBd=on?null:'#2563eb'; }
+            else{               qBg=on?'#16a34a':'#f0fdf4'; qFg=on?'#fff':'#14532d'; qBd=on?null:'#16a34a'; }
+          } else {
+            qBg=on?'#64748b':C.white; qFg=on?'#fff':C.tx2; qBd=on?null:C.bd;
+          }
+          roundRect(ctx, tbx, rowY+(TROOP_H-18)/2, 28, 18, 4, qBg, qBd);
+          ctx.fillStyle = qFg;
           ctx.font = 'bold 10px "Noto Sans JP",sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -2096,23 +2110,33 @@ function shareDiscord(){
           // 武将名・国・コスト
           var infoX = avX + AV_SIZE + 6;
           var infoW = innerW - AV_SIZE - 6;
+          // アバターと情報エリアを縦中央で揃える
+          var infoTotalH = 14 + 4 + 18; // 名前行 + gap + バッジ行
+          var infoStartY = avY + (AV_SIZE - infoTotalH) / 2;
+
           ctx.fillStyle = C.tx;
           ctx.font = 'bold 12px "Noto Sans JP",sans-serif';
           ctx.textAlign = 'left';
-          ctx.textBaseline = 'top';
-          ctx.fillText(clipText(ctx,g.n,infoW), infoX, avY+2);
+          ctx.textBaseline = 'middle';
+          ctx.fillText(clipText(ctx,g.n,infoW), infoX, infoStartY + 7);
 
-          // 勢力・コストバッジ
+          // 勢力・コストバッジ（固定サイズ・中央揃え）
+          var BADGE_H = 18;
+          var FTAG_W  = 22;
+          var CTAG_W  = 30;
+          var badgeY  = infoStartY + 14 + 4;
           var bx2 = infoX;
-          roundRect(ctx, bx2, avY+18, 22, 13, 3, factionColor(g.f));
-          ctx.fillStyle='#fff'; ctx.font='bold 8px "Noto Sans JP",sans-serif';
+          // 国バッジ
+          roundRect(ctx, bx2, badgeY, FTAG_W, BADGE_H, 3, factionColor(g.f));
+          ctx.fillStyle='#fff'; ctx.font='bold 9px "Noto Sans JP",sans-serif';
           ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText(g.f, bx2+11, avY+18+6.5);
-          bx2 += 25;
-          roundRect(ctx, bx2, avY+18, 26, 13, 3, '#f1f5f9');
-          ctx.fillStyle=C.tx2; ctx.font='bold 8px "Noto Sans JP",sans-serif';
+          ctx.fillText(g.f, bx2 + FTAG_W/2, badgeY + BADGE_H/2);
+          bx2 += FTAG_W + 3;
+          // コストバッジ
+          roundRect(ctx, bx2, badgeY, CTAG_W, BADGE_H, 3, '#1e293b');
+          ctx.fillStyle='#fff'; ctx.font='bold 9px "Noto Sans JP",sans-serif';
           ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText('C'+g.c, bx2+13, avY+18+6.5);
+          ctx.fillText('C'+g.c, bx2 + CTAG_W/2, badgeY + BADGE_H/2);
 
           cy += AV_SIZE + 5;
 
@@ -2160,7 +2184,7 @@ function shareDiscord(){
           if(fxsk && fxsk.tp==='start'){        fxNbg=C.tp_start_bg;  fxNfg=C.tp_start_tx;  fxNbd=C.tp_start_bd; }
           else if(fxsk && fxsk.tp==='active'){  fxNbg=C.tp_active_bg; fxNfg=C.tp_active_tx; fxNbd=C.tp_active_bd; }
           else if(fxsk && fxsk.tp==='passive'){ fxNbg=C.tp_passive_bg;fxNfg=C.tp_passive_tx;fxNbd=C.tp_passive_bd;}
-          else { fxNbg=C.fixbg; fxNfg=C.fixtx; fxNbd='#cbd5e1'; }
+          else { fxNbg=C.fixbg; fxNfg=C.fixtx; fxNbd='#ddd6fe'; }
           skList.push({label:'固有', bg:C.fixbg, fg:C.fixtx, name:fxsk?fxsk.n:(g.fx||'固有スキル'), nameBg:fxNbg, nameFg:fxNfg, nameBd:fxNbd});
           for(var ski=0;ski<slot.sk.length;ski++){
             var sk = slot.sk[ski] ? findS(slot.sk[ski]) : null;
