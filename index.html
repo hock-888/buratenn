@@ -153,6 +153,8 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .dph{padding:9px 13px;border-bottom:1px solid var(--bd);background:var(--sur2);display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
 .dpt{font-size:12px;font-weight:700;}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(65px,1fr));gap:5px;padding:9px 11px;max-height:calc(65vh - 60px);min-height:140px;overflow-y:auto;}
+#sdgrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+#sdgrid .dgc{align-items:flex-start;padding:5px 7px;}
 .dgrid::-webkit-scrollbar{width:3px;}
 .dgrid::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px;}
 
@@ -1478,8 +1480,8 @@ function renderSDgrid(){
         +' ondragstart="onDS(event,\'s\',\''+s.id+'\')"'
         +' ondragend="onDE()"'
         +' onclick="sdClick(\''+s.id+'\')">'
-        +'<div class="dgc-name" style="font-size:8px">'+s.n+'</div>'
-        +'<div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap">'+lvTag(s.lv)+stypeHtml(s.tp)+'</div>'
+        +'<div class="dgc-name" style="font-size:8px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%">'+s.n+'</div>'
+        +'<div style="display:flex;gap:2px;flex-wrap:wrap;margin-top:1px;">'+lvTag(s.lv)+stypeHtml(s.tp)+'</div>'
         +'</div>';
   }
   if(!found) html='<div class="nomsg">所持スキルなし（所持一覧で登録）</div>';
