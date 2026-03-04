@@ -65,7 +65,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chip.s5.on{background:var(--s5c);border-color:var(--s5c);}
 .chip.s4.on{background:var(--s4c);border-color:var(--s4c);}
 .chip.s3.on{background:var(--s3c);border-color:var(--s3c);}
-.chip.tc.on{background:#64748b;border-color:#64748b;color:#fff;}
+.chip.tc.on{background:#d97706;border-color:#d97706;color:#fff;}
 .chip.stt.on{background:#0891b2;border-color:#0891b2;color:#fff;}
 .chip.stt-start.on{background:#0891b2;border-color:#0891b2;color:#fff;}
 .chip.stt-active.on{background:#dc2626;border-color:#dc2626;color:#fff;}
@@ -2195,19 +2195,17 @@ function shareDiscord(){
       W-PAD, y+FOOTER_H/2
     );
 
-    // PNG出力 ── iOS/Android対応
+    // PNG出力
     var d = new Date();
     var fname = 'buratenn_'
       +d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2)
       +'_'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)+'.png';
 
-    // iOSかどうか判定
-    var isIOS = /iP(hone|od|ad)/.test(navigator.userAgent)
-             || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+                || (navigator.maxTouchPoints > 1);
 
-    if(isIOS){
-      // iOS: 新しいタブで画像を開く → 長押し「写真に追加」で保存
-      var dataUrl = canvas.toDataURL('image/png');
+    function openInNewTab(dataUrl){
+      // 新しいタブで画像を開く（スマホで長押し保存 or PC右クリック保存）
       var w = window.open('', '_blank');
       if(w){
         w.document.write(
@@ -2220,37 +2218,54 @@ function shareDiscord(){
           +'img{max-width:100%;display:block;}'
           +'.msg{color:#fff;font-family:sans-serif;font-size:14px;padding:16px;text-align:center;line-height:1.7;}'
           +'</style></head><body>'
-          +'<p class="msg">📷 画像を長押し →「写真に追加」で写真アプリに保存できます</p>'
+          +'<p class="msg">📷 画像を長押し →「写真に追加」または「画像を保存」で保存できます</p>'
           +'<img src="'+dataUrl+'" alt="部隊編成">'
           +'</body></html>'
         );
         w.document.close();
-      } else {
-        // ポップアップブロック時のフォールバック
-        var dataUrl2 = canvas.toDataURL('image/png');
-        var a2 = document.createElement('a');
-        a2.href = dataUrl2;
-        a2.target = '_blank';
-        document.body.appendChild(a2);
-        a2.click();
-        document.body.removeChild(a2);
       }
-    } else {
-      // PC / Android: 通常ダウンロード
-      canvas.toBlob(function(blob){
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = fname;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 'image/png');
     }
 
-    btn.disabled = false;
-    btn.textContent = '📷 部隊編成を画像で保存';
+    canvas.toBlob(function(blob){
+      if(!blob){ btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存'; return; }
+
+      // Web Share API対応スマホ（iOS Safari / Android Chrome等）
+      if(isMobile && navigator.share && navigator.canShare){
+        var file = new File([blob], fname, {type:'image/png'});
+        if(navigator.canShare({files:[file]})){
+          navigator.share({files:[file], title:'ブラ天 部隊編成'})
+            .catch(function(e){
+              // キャンセルや失敗時は新タブにフォールバック
+              if(e.name !== 'AbortError'){
+                openInNewTab(URL.createObjectURL(blob));
+              }
+            });
+          btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
+          return;
+        }
+      }
+
+      // スマホでWeb Share非対応 → 新しいタブで開く
+      if(isMobile){
+        var reader = new FileReader();
+        reader.onload = function(){
+          openInNewTab(reader.result);
+        };
+        reader.readAsDataURL(blob);
+        btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
+        return;
+      }
+
+      // PC: 通常ダウンロード
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+      btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
+    }, 'image/png');
   }
 }
 
