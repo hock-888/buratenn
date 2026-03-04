@@ -363,11 +363,17 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .sq-troop-lbl{font-size:10px;font-weight:700;color:var(--tx3);white-space:nowrap;}
 .tbtn{padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;border:1.5px solid var(--bd);background:var(--sur);cursor:pointer;color:var(--tx2);transition:all .12s;line-height:1.5;}
 .tbtn:hover{border-color:#64748b;color:#334155;}
-.tbtn.on.t盾{background:#475569;border-color:#475569;color:#fff;box-shadow:0 2px 6px rgba(71,85,105,.35);}
-.tbtn.on.t弓{background:#64748b;border-color:#64748b;color:#fff;box-shadow:0 2px 6px rgba(100,116,139,.35);}
-.tbtn.on.t槍{background:#374151;border-color:#374151;color:#fff;box-shadow:0 2px 6px rgba(55,65,81,.35);}
-.tbtn.on.t兵{background:#6b7280;border-color:#6b7280;color:#fff;box-shadow:0 2px 6px rgba(107,114,128,.35);}
-.tbtn.on.t騎{background:#94a3b8;border-color:#94a3b8;color:#fff;box-shadow:0 2px 6px rgba(148,163,184,.35);}
+/* 兵種適性品質カラー（未選択時） */
+.tbtn.q-gold{border-color:#d97706;color:#92400e;background:#fffbeb;}
+.tbtn.q-red{border-color:#e11d48;color:#9f1239;background:#fff1f2;}
+.tbtn.q-blue{border-color:#2563eb;color:#1e40af;background:#eff6ff;}
+.tbtn.q-green{border-color:#16a34a;color:#14532d;background:#f0fdf4;}
+/* 兵種適性品質カラー（選択時）─ 未選択と同系色の濃い塗り */
+.tbtn.on.q-gold{background:#d97706;border-color:#d97706;color:#fff;box-shadow:0 2px 6px rgba(217,119,6,.4);}
+.tbtn.on.q-red{background:#e11d48;border-color:#e11d48;color:#fff;box-shadow:0 2px 6px rgba(225,29,72,.4);}
+.tbtn.on.q-blue{background:#2563eb;border-color:#2563eb;color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.4);}
+.tbtn.on.q-green{background:#16a34a;border-color:#16a34a;color:#fff;box-shadow:0 2px 6px rgba(22,163,74,.4);}
+
 
 /* 兵種適性ランク表示 */
 .troop-ranks{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;}
@@ -2278,10 +2284,26 @@ function renderSquads(){
     });
 
     // 兵種選択バー（部隊単位）
+    // 各兵種ごとにメンバー全員の適性を評価して色クラスを決定
     var troopBar='<div class="sq-troop-bar"><span class="sq-troop-lbl">兵種：</span>';
     ['騎','盾','弓','槍','兵'].forEach(function(t){
       var on=(q.troop===t)?' on t'+t:'';
-      troopBar+='<button class="tbtn'+on+'" onclick="setTroop('+q.id+',\''+t+'\')">'+t+'</button>';
+      // メンバーの適性ランクを収集
+      var rankVal={'S':4,'A':3,'B':2,'C':1};
+      var ranks=[];
+      for(var si2=0;si2<q.slots.length;si2++){
+        var mg=q.slots[si2].g?findG(q.slots[si2].g):null;
+        if(mg&&mg.troops) ranks.push(mg.troops[t]||'C');
+      }
+      var qcls='';
+      if(ranks.length>0){
+        var minVal=ranks.reduce(function(a,r){ return Math.min(a,rankVal[r]||1); },4);
+        if(minVal>=4) qcls=' q-gold';
+        else if(minVal>=3) qcls=' q-red';
+        else if(minVal>=2) qcls=' q-blue';
+        else qcls=' q-green';
+      }
+      troopBar+='<button class="tbtn'+on+qcls+'" onclick="setTroop('+q.id+',\''+t+'\')">'+t+'</button>';
     });
     troopBar+='</div>';
 
