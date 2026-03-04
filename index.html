@@ -1112,16 +1112,25 @@ function getCookie(name){
   return null;
 }
 
+var LS_KEY = COOKIE_KEY + '_ls';
+
 function saveState(){
   try{
     var data = { ownedG:ownedG, ownedS:ownedS, squads:squads, sqCnt:sqCnt };
-    setCookie(COOKIE_KEY, JSON.stringify(data), COOKIE_DAYS);
+    var json = JSON.stringify(data);
+    localStorage.setItem(LS_KEY, json);
+    // クッキーにも保存（フォールバック用・サイズ超過は無視）
+    try{ setCookie(COOKIE_KEY, json, COOKIE_DAYS); }catch(e){}
   }catch(e){ console.warn('save failed',e); }
 }
 
 function loadState(){
   try{
-    var raw = getCookie(COOKIE_KEY);
+    // まずlocalStorageから読む
+    var raw = null;
+    try{ raw = localStorage.getItem(LS_KEY); }catch(e){}
+    // なければクッキーから読む（移行用）
+    if(!raw) raw = getCookie(COOKIE_KEY);
     if(!raw) return false;
     var data = JSON.parse(raw);
     if(data.ownedG) ownedG = data.ownedG;
@@ -1668,13 +1677,6 @@ function rmSk(qid,si,ki){
   saveState();
   renderSDgrid(); renderSquads();
 }
-
-function setTroop(qid,troop){
-  var q=findSq(qid); if(!q) return;
-  q.troop=(q.troop===troop)?null:troop;
-  renderSquads();
-}
-
 
 // ── Discord用画像共有 ──
 function shareDiscord(){
@@ -2505,6 +2507,8 @@ function hideResetConfirm(){
   document.getElementById('reset-ov').classList.add('hide');
 }
 function doReset(){
+  // localStorageを削除
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
   // クッキーを削除（過去の日付でexpire）
   document.cookie = COOKIE_KEY + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;SameSite=Lax';
   // 同じドメインに存在しうる他のパスのクッキーも念のため削除
