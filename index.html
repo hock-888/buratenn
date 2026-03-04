@@ -65,7 +65,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chip.s5.on{background:var(--s5c);border-color:var(--s5c);}
 .chip.s4.on{background:var(--s4c);border-color:var(--s4c);}
 .chip.s3.on{background:var(--s3c);border-color:var(--s3c);}
-.chip.tc.on{background:#0f766e;border-color:#0f766e;color:#fff;}
+.chip.tc.on{background:#64748b;border-color:#64748b;color:#fff;}
 .chip.stt.on{background:#0891b2;border-color:#0891b2;color:#fff;}
 .chip.stt-start.on{background:#0891b2;border-color:#0891b2;color:#fff;}
 .chip.stt-active.on{background:#dc2626;border-color:#dc2626;color:#fff;}
@@ -236,18 +236,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .sk-dz.set.tp-active:hover{background:#fee2e2;border-color:#b91c1c;}
 .sk-dz.set.tp-passive{background:#fffbeb;border-color:#d97706;color:#92400e;border-style:solid;}
 .sk-dz.set.tp-passive:hover{background:#fef3c7;border-color:#b45309;}
-/* 固有スキル：タイプ別背景色＋左ボーダーで固有とわかるように */
-.skbtn.fix-sk{background:#fffbeb;border-color:#fbbf24;color:#92400e;border-style:solid;cursor:default;border-left:3px solid #f59e0b;}
-.skbtn.fix-sk.tp-start{background:#ecfeff;border-color:#0891b2;color:#0e7490;border-left:3px solid #0891b2;}
-.skbtn.fix-sk.tp-active{background:#fef2f2;border-color:#dc2626;color:#b91c1c;border-left:3px solid #dc2626;}
-.skbtn.fix-sk.tp-passive{background:#fffbeb;border-color:#d97706;color:#92400e;border-left:3px solid #d97706;}
+/* 固有スキル：固有とわかるように */
+.skbtn.fix-sk{background:#f0fdf4;border-color:var(--grn);color:#15803d;border-style:solid;cursor:default;}
 /* 固有スキルをsk-dzと同じ見せ方にする */
 .sk-dz.fix-sk{cursor:default;}
 .sk-dz.fix-sk:hover{border-color:inherit;background:inherit;color:inherit;}
-.sk-dz.set.fix-sk.tp-start{border-left:3px solid #0891b2;}
-.sk-dz.set.fix-sk.tp-active{border-left:3px solid #dc2626;}
-.sk-dz.set.fix-sk.tp-passive{border-left:3px solid #d97706;}
-.sk-dz.set.fix-sk:not([class*="tp-"]){background:#fffbeb;border-color:#d97706;color:#92400e;border-left:3px solid #f59e0b;}
 
 /* ── SKILL TOOLTIP ── */
 .sk-tip-wrap{position:relative;flex:1;min-width:0;}
@@ -2387,7 +2380,7 @@ function renderSlot(qid,si,slot,sqTroop){
         // 兵種適性（選択兵種を強調）
         +troopRanksHtml
         // スキルスロット
-        +'<div class="skslots">'
+        +'<div class="skslots" style="margin-top:6px">'
         +(function(){
           var fxsk=getFxSkill(g);
           var fxTp=fxsk?fxsk.tp:'';
