@@ -115,19 +115,19 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .gc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
 .gc-tname{color:var(--tx3);font-weight:600;font-size:6.5px;}
 .gc-trank{font-weight:800;font-size:7.5px;}
-.gc-troop.trS{background:#fde8e8;}.gc-troop.trS .gc-trank{color:#b91c1c;}
-.gc-troop.trA{background:#fef3c7;}.gc-troop.trA .gc-trank{color:#b45309;}
+.gc-troop.trS{background:#fef3c7;}.gc-troop.trS .gc-trank{color:#92400e;}
+.gc-troop.trA{background:#ffe4e6;}.gc-troop.trA .gc-trank{color:#be123c;}
 .gc-troop.trB{background:#dbeafe;}.gc-troop.trB .gc-trank{color:#1d4ed8;}
-.gc-troop.trC{background:#f1f5f9;}.gc-troop.trC .gc-trank{color:#6b7280;}
+.gc-troop.trC{background:#dcfce7;}.gc-troop.trC .gc-trank{color:#15803d;}
 /* 兵種適性表示（ドラッグカード） */
 .dgc-troops{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:3px;width:100%;}
 .dgc-troop{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1px 1px;border-radius:3px;font-size:7px;font-weight:700;line-height:1.3;overflow:hidden;}
 .dgc-tname{font-size:6px;font-weight:700;}
 .dgc-trank{font-size:7px;font-weight:800;}
-.dgc-troop.trS{background:#fde8e8;}.dgc-troop.trS .dgc-trank{color:#b91c1c;}
-.dgc-troop.trA{background:#fef3c7;}.dgc-troop.trA .dgc-trank{color:#b45309;}
+.dgc-troop.trS{background:#fef3c7;}.dgc-troop.trS .dgc-trank{color:#92400e;}
+.dgc-troop.trA{background:#ffe4e6;}.dgc-troop.trA .dgc-trank{color:#be123c;}
 .dgc-troop.trB{background:#dbeafe;}.dgc-troop.trB .dgc-trank{color:#1d4ed8;}
-.dgc-troop.trC{background:#f1f5f9;}.dgc-troop.trC .dgc-trank{color:#6b7280;}
+.dgc-troop.trC{background:#dcfce7;}.dgc-troop.trC .dgc-trank{color:#15803d;}
 
 /* ── SKILL CARD (roster) ── */
 .scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:3px;}
@@ -229,6 +229,25 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .sk-dz:hover,.sk-dz.over{border-color:var(--red);background:#fff7f7;color:var(--red);}
 .sk-dz.set{background:#f0fdf4;border-color:var(--grn);color:#15803d;border-style:solid;}
 .sk-dz.set:hover,.sk-dz.set.over{background:#dcfce7;border-color:#15803d;}
+/* セット済みスキル：タイプ別背景色 */
+.sk-dz.set.tp-start{background:#ecfeff;border-color:#0891b2;color:#0e7490;border-style:solid;}
+.sk-dz.set.tp-start:hover{background:#cffafe;border-color:#0e7490;}
+.sk-dz.set.tp-active{background:#fef2f2;border-color:#dc2626;color:#b91c1c;border-style:solid;}
+.sk-dz.set.tp-active:hover{background:#fee2e2;border-color:#b91c1c;}
+.sk-dz.set.tp-passive{background:#fffbeb;border-color:#d97706;color:#92400e;border-style:solid;}
+.sk-dz.set.tp-passive:hover{background:#fef3c7;border-color:#b45309;}
+/* 固有スキル：タイプ別背景色＋左ボーダーで固有とわかるように */
+.skbtn.fix-sk{background:#fffbeb;border-color:#fbbf24;color:#92400e;border-style:solid;cursor:default;border-left:3px solid #f59e0b;}
+.skbtn.fix-sk.tp-start{background:#ecfeff;border-color:#0891b2;color:#0e7490;border-left:3px solid #0891b2;}
+.skbtn.fix-sk.tp-active{background:#fef2f2;border-color:#dc2626;color:#b91c1c;border-left:3px solid #dc2626;}
+.skbtn.fix-sk.tp-passive{background:#fffbeb;border-color:#d97706;color:#92400e;border-left:3px solid #d97706;}
+/* 固有スキルをsk-dzと同じ見せ方にする */
+.sk-dz.fix-sk{cursor:default;}
+.sk-dz.fix-sk:hover{border-color:inherit;background:inherit;color:inherit;}
+.sk-dz.set.fix-sk.tp-start{border-left:3px solid #0891b2;}
+.sk-dz.set.fix-sk.tp-active{border-left:3px solid #dc2626;}
+.sk-dz.set.fix-sk.tp-passive{border-left:3px solid #d97706;}
+.sk-dz.set.fix-sk:not([class*="tp-"]){background:#fffbeb;border-color:#d97706;color:#92400e;border-left:3px solid #f59e0b;}
 
 /* ── SKILL TOOLTIP ── */
 .sk-tip-wrap{position:relative;flex:1;min-width:0;}
@@ -363,15 +382,15 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 /* 非選択時（グレーアウト） */
 .trank.dim{background:#f1f5f9;color:#94a3b8;border-color:#e2e8f0;}
 /* 選択兵種に一致するランク（強調） */
-.trank.hi-S{background:#dc2626;color:#fff;border-color:#dc2626;transform:scale(1.15);box-shadow:0 1px 4px rgba(220,38,38,.4);}
-.trank.hi-A{background:#d97706;color:#fff;border-color:#d97706;transform:scale(1.1);box-shadow:0 1px 4px rgba(217,119,6,.4);}
+.trank.hi-S{background:#d97706;color:#fff;border-color:#d97706;transform:scale(1.15);box-shadow:0 1px 4px rgba(217,119,6,.4);}
+.trank.hi-A{background:#e11d48;color:#fff;border-color:#e11d48;transform:scale(1.1);box-shadow:0 1px 4px rgba(225,29,72,.4);}
 .trank.hi-B{background:#2563eb;color:#fff;border-color:#2563eb;}
-.trank.hi-C{background:#6b7280;color:#fff;border-color:#6b7280;}
+.trank.hi-C{background:#16a34a;color:#fff;border-color:#16a34a;}
 /* 非選択時のデフォルト色（淡い） */
-.trank.trS{background:#fde8e8;color:#b91c1c;border-color:#fca5a5;}
-.trank.trA{background:#fef3c7;color:#b45309;border-color:#fde68a;}
+.trank.trS{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+.trank.trA{background:#ffe4e6;color:#be123c;border-color:#fecdd3;}
 .trank.trB{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe;}
-.trank.trC{background:#f1f5f9;color:#6b7280;border-color:#e2e8f0;}
+.trank.trC{background:#dcfce7;color:#15803d;border-color:#bbf7d0;}
 
 /* ── FACTION BADGE（国バッジ） ── */
 .fbadge{display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;border:2px solid transparent;transition:all .2s;line-height:1.4;}
@@ -2116,8 +2135,8 @@ function shareDiscord(){
               var r = g.troops[t]||'C';
               var trX = innerX + ti*trW2;
               var trColors = {
-                S:['#fde8e8','#b91c1c'], A:['#fef3c7','#b45309'],
-                B:['#dbeafe','#1d4ed8'], C:['#f1f5f9','#6b7280']
+                S:['#fef3c7','#92400e'], A:['#ffe4e6','#be123c'],
+                B:['#dbeafe','#1d4ed8'], C:['#dcfce7','#15803d']
               };
               var tc2 = trColors[r]||trColors['C'];
               var isDim = q.troop && q.troop!==t;
@@ -2369,35 +2388,48 @@ function renderSlot(qid,si,slot,sqTroop){
         +troopRanksHtml
         // スキルスロット
         +'<div class="skslots">'
-        +'<div class="skrow"><span class="skbadge fix">固有</span>'
-        +'<div class="sk-tip-wrap">'
-        +'<button class="skbtn fix-sk">'+eh(g.fx)+'</button>'
-        +mkSkTip(getFxSkill(g))
-        +'</div></div>'
-        +'<div class="skrow"><span class="skbadge sk-free">スキル1</span>'
-        +'<div class="sk-tip-wrap">'
-        +'<div class="sk-dz'+(sk0?' set':'')+'"'
-        +' ondragover="skDzOver(event,'+qid+','+si+',0)"'
-        +' ondragleave="skDzLeave(event)"'
-        +' ondrop="skDzDrop(event,'+qid+','+si+',0)"'
-        +' onclick="skDzClick('+qid+','+si+',0)">'
-        +eh(sk0?sk0.n:'ドロップ or クリック')
-        +(sk0?'<span style="float:right;cursor:pointer;color:#aaa;margin-left:4px" onclick="event.stopPropagation();rmSk('+qid+','+si+',0)">✕</span>':'')
-        +'</div>'
-        +(sk0?mkSkTip(sk0):'')
-        +'</div></div>'
-        +'<div class="skrow"><span class="skbadge sk-free">スキル2</span>'
-        +'<div class="sk-tip-wrap">'
-        +'<div class="sk-dz'+(sk1?' set':'')+'"'
-        +' ondragover="skDzOver(event,'+qid+','+si+',1)"'
-        +' ondragleave="skDzLeave(event)"'
-        +' ondrop="skDzDrop(event,'+qid+','+si+',1)"'
-        +' onclick="skDzClick('+qid+','+si+',1)">'
-        +eh(sk1?sk1.n:'ドロップ or クリック')
-        +(sk1?'<span style="float:right;cursor:pointer;color:#aaa;margin-left:4px" onclick="event.stopPropagation();rmSk('+qid+','+si+',1)">✕</span>':'')
-        +'</div>'
-        +(sk1?mkSkTip(sk1):'')
-        +'</div></div>'
+        +(function(){
+          var fxsk=getFxSkill(g);
+          var fxTp=fxsk?fxsk.tp:'';
+          var fxTpCls=fxTp?' tp-'+fxTp:'';
+          return '<div class="skrow"><span class="skbadge fix">固有</span>'
+            +'<div class="sk-tip-wrap">'
+            +'<div class="sk-dz set fix-sk'+fxTpCls+'">'+eh(g.fx)+'</div>'
+            +mkSkTip(fxsk)
+            +'</div></div>';
+        })()
+        +(function(){
+          var tp0=sk0?sk0.tp:'';
+          var cls0='sk-dz'+(sk0?' set tp-'+tp0:'');
+          return '<div class="skrow"><span class="skbadge sk-free">スキル1</span>'
+            +'<div class="sk-tip-wrap">'
+            +'<div class="'+cls0+'"'
+            +' ondragover="skDzOver(event,'+qid+','+si+',0)"'
+            +' ondragleave="skDzLeave(event)"'
+            +' ondrop="skDzDrop(event,'+qid+','+si+',0)"'
+            +' onclick="skDzClick('+qid+','+si+',0)">'
+            +eh(sk0?sk0.n:'ドロップ or クリック')
+            +(sk0?'<span style="float:right;cursor:pointer;color:#aaa;margin-left:4px" onclick="event.stopPropagation();rmSk('+qid+','+si+',0)">✕</span>':'')
+            +'</div>'
+            +(sk0?mkSkTip(sk0):'')
+            +'</div></div>';
+        })()
+        +(function(){
+          var tp1=sk1?sk1.tp:'';
+          var cls1='sk-dz'+(sk1?' set tp-'+tp1:'');
+          return '<div class="skrow"><span class="skbadge sk-free">スキル2</span>'
+            +'<div class="sk-tip-wrap">'
+            +'<div class="'+cls1+'"'
+            +' ondragover="skDzOver(event,'+qid+','+si+',1)"'
+            +' ondragleave="skDzLeave(event)"'
+            +' ondrop="skDzDrop(event,'+qid+','+si+',1)"'
+            +' onclick="skDzClick('+qid+','+si+',1)">'
+            +eh(sk1?sk1.n:'ドロップ or クリック')
+            +(sk1?'<span style="float:right;cursor:pointer;color:#aaa;margin-left:4px" onclick="event.stopPropagation();rmSk('+qid+','+si+',1)">✕</span>':'')
+            +'</div>'
+            +(sk1?mkSkTip(sk1):'')
+            +'</div></div>';
+        })()
         +'</div></div></div>';
 }
 
