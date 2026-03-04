@@ -130,14 +130,16 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .dgc-troop.trC{background:#dcfce7;}.dgc-troop.trC .dgc-trank{color:#15803d;}
 
 /* ── SKILL CARD (roster) ── */
-.scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:3px;}
+.scard{border:2px solid var(--bd);border-radius:var(--rs);cursor:pointer;transition:all .15s;position:relative;background:var(--sur2);padding:8px 9px 7px;display:flex;flex-direction:column;gap:2px;}
 .scard:hover{border-color:var(--red);box-shadow:0 2px 10px rgba(192,57,43,.12);}
 .scard.owned{border-color:var(--grn);background:#f0fdf4;}
 .scard.owned .ck{display:flex;}
-.sc-name{font-size:10px;font-weight:700;line-height:1.3;}
+.sc-name{font-size:10px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sc-row{display:flex;gap:3px;align-items:center;flex-wrap:wrap;}
 .sc-desc{font-size:9px;color:var(--tx3);line-height:1.35;}
 .sc-src{font-size:9px;color:var(--tx3);line-height:1.3;}
+/* スキル所持一覧は広めの列幅 */
+#sgrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
 
 /* ── ROSTER BODY ── */
 .rb{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
@@ -208,8 +210,8 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 
 /* skill slots */
 .skslots{display:flex;flex-direction:column;gap:3px;}
-.skrow{display:flex;gap:3px;align-items:center;width:100%;min-width:0;}
-.skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;white-space:nowrap;flex-shrink:0;line-height:1.5;width:38px;text-align:center;box-sizing:border-box;}
+.skrow{display:flex;gap:3px;align-items:stretch;width:100%;min-width:0;}
+.skbadge{font-size:8px;font-weight:700;padding:0 4px;border-radius:3px;white-space:nowrap;flex-shrink:0;line-height:1;width:38px;text-align:center;box-sizing:border-box;display:flex;align-items:center;justify-content:center;}
 .skbadge.fix{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;}
 .skbadge.lv5{background:var(--s5c);color:#fff;}
 .skbadge.lv4{background:var(--s4c);color:#fff;}
@@ -225,7 +227,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 @media(max-width:660px){.dpanels{grid-template-columns:1fr;}}
 
 /* ── SKILL DROP ZONE in slot ── */
-.sk-dz{flex:1;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:600;border:1.5px dashed var(--bd2);background:var(--sur);color:var(--tx3);cursor:pointer;text-align:left;transition:all .12s;min-width:0;line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sk-dz{flex:1;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:600;border:1.5px dashed var(--bd2);background:var(--sur);color:var(--tx3);cursor:pointer;text-align:left;transition:all .12s;min-width:0;line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;}
 .sk-dz:hover,.sk-dz.over{border-color:var(--red);background:#fff7f7;color:var(--red);}
 .sk-dz.set{background:#f0fdf4;border-color:var(--grn);color:#15803d;border-style:solid;}
 .sk-dz.set:hover,.sk-dz.set.over{background:#dcfce7;border-color:#15803d;}
@@ -1377,7 +1379,7 @@ function renderSgrid(){
         +'<div class="ck">✓</div>'
         +'<div class="sc-name">'+s.n+'</div>'
         +'<div class="sc-row">'+lvTag(s.lv)+stypeHtml(s.tp)+'</div>'
-        +'<div class="sc-src">入手: '+s.src+' をスキル化</div>'
+        +'<div class="sc-src">入手: '+s.src+'</div>'
         +'<div class="sc-desc">'+s.d+'</div>'
         +'</div>';
   }
