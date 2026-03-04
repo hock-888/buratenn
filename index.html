@@ -210,11 +210,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .skslots{display:flex;flex-direction:column;gap:3px;}
 .skrow{display:flex;gap:3px;align-items:center;width:100%;min-width:0;}
 .skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;white-space:nowrap;flex-shrink:0;line-height:1.5;width:38px;text-align:center;box-sizing:border-box;}
-.skbadge.fix{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+.skbadge.fix{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
 .skbadge.lv5{background:var(--s5c);color:#fff;}
 .skbadge.lv4{background:var(--s4c);color:#fff;}
 .skbadge.lv3{background:var(--s3c);color:#fff;}
-.skbadge.sk-free{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;}
+.skbadge.sk-free{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
 .skbtn{flex:1;min-width:0;max-width:100%;width:100%;padding:3px 6px;border-radius:4px;font-size:9px;font-weight:600;border:1.5px dashed var(--bd2);background:var(--sur);cursor:pointer;color:var(--tx3);transition:all .12s;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Noto Sans JP',sans-serif;line-height:1.4;display:block;box-sizing:border-box;}
 .skbtn:hover{border-color:var(--red);color:var(--red);background:#fff7f7;}
 .skbtn.set{background:#f0fdf4;border-color:var(--grn);color:#15803d;border-style:solid;}
@@ -292,11 +292,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 #share-preview .skslots{display:flex;flex-direction:column;gap:3px;}
 #share-preview .skrow{display:flex;gap:3px;align-items:center;}
 #share-preview .skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;width:38px;text-align:center;box-sizing:border-box;line-height:1.5;}
-#share-preview .skbadge.fix{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+#share-preview .skbadge.fix{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
 #share-preview .skbadge.lv5{background:#d97706;color:#fff;}
 #share-preview .skbadge.lv4{background:#e11d48;color:#fff;}
 #share-preview .skbadge.lv3{background:#2563eb;color:#fff;}
-#share-preview .skbadge.sk-free{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;}
+#share-preview .skbadge.sk-free{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;}
 #share-preview .skbtn-txt{flex:1;padding:2px 5px;border-radius:4px;font-size:9px;font-weight:600;background:#f1f5f9;color:#58627a;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #share-preview .ftag{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;color:#fff;}
 #share-preview .f魏{background:#2563eb;}
@@ -1800,6 +1800,7 @@ function shareDiscord(){
       white   : '#ffffff',
       sur2    : '#f7f8fb',
       bd      : '#e1e6ef',
+      bd2     : '#cdd2dc',
       tx      : '#18202e',
       tx2     : '#58627a',
       tx3     : '#96a0b5',
@@ -1809,13 +1810,17 @@ function shareDiscord(){
       wu      : '#dc2626',
       shu     : '#16a34a',
       oth     : '#7c3aed',
-      lv5     : '#7c3aed',
-      lv4     : '#1d4ed8',
-      lv3     : '#374151',
-      fixbg   : '#fef3c7',
-      fixtx   : '#92400e',
-      freebg  : '#e0e7ff',
-      freetx  : '#3730a3',
+      lv5     : '#d97706',
+      lv4     : '#e11d48',
+      lv3     : '#2563eb',
+      fixbg   : '#f1f5f9',
+      fixtx   : '#475569',
+      freebg  : '#f1f5f9',
+      freetx  : '#475569',
+      // スキルタイプ別色（背景・文字）
+      tp_start_bg   : '#ecfeff', tp_start_bd  : '#0891b2', tp_start_tx  : '#0e7490',
+      tp_active_bg  : '#fef2f2', tp_active_bd : '#dc2626', tp_active_tx : '#b91c1c',
+      tp_passive_bg : '#fffbeb', tp_passive_bd: '#d97706', tp_passive_tx: '#92400e',
     };
 
     var factionColor = function(f){
@@ -2151,14 +2156,26 @@ function shareDiscord(){
           // スキル（固有＋2枠）
           var skList = [];
           var fxsk = getFxSkill(g);
-          skList.push({label:'固有', bg:C.fixbg, fg:C.fixtx, name:fxsk?fxsk.n:(g.fx||'固有スキル')});
+          var fxNbg, fxNfg, fxNbd;
+          if(fxsk && fxsk.tp==='start'){        fxNbg=C.tp_start_bg;  fxNfg=C.tp_start_tx;  fxNbd=C.tp_start_bd; }
+          else if(fxsk && fxsk.tp==='active'){  fxNbg=C.tp_active_bg; fxNfg=C.tp_active_tx; fxNbd=C.tp_active_bd; }
+          else if(fxsk && fxsk.tp==='passive'){ fxNbg=C.tp_passive_bg;fxNfg=C.tp_passive_tx;fxNbd=C.tp_passive_bd;}
+          else { fxNbg=C.fixbg; fxNfg=C.fixtx; fxNbd='#cbd5e1'; }
+          skList.push({label:'固有', bg:C.fixbg, fg:C.fixtx, name:fxsk?fxsk.n:(g.fx||'固有スキル'), nameBg:fxNbg, nameFg:fxNfg, nameBd:fxNbd});
           for(var ski=0;ski<slot.sk.length;ski++){
             var sk = slot.sk[ski] ? findS(slot.sk[ski]) : null;
             if(sk){
-              var lvBg = sk.lv===5?C.lv5:(sk.lv===4?C.lv4:C.lv3);
-              skList.push({label:'Lv'+sk.lv, bg:lvBg, fg:'#fff', name:sk.n});
+              // スキルタイプ別の名前エリア背景色（UIのtp-start/active/passive色に合わせる）
+              var nbg, nfg, nbd;
+              if(sk.tp==='start'){   nbg=C.tp_start_bg;  nfg=C.tp_start_tx;  nbd=C.tp_start_bd; }
+              else if(sk.tp==='active'){  nbg=C.tp_active_bg; nfg=C.tp_active_tx; nbd=C.tp_active_bd; }
+              else if(sk.tp==='passive'){ nbg=C.tp_passive_bg;nfg=C.tp_passive_tx;nbd=C.tp_passive_bd;}
+              else { nbg='#f0fdf4'; nfg='#15803d'; nbd='#16a34a'; }
+              // バッジはsk-free色（UIと統一：青紫背景）
+              skList.push({label:'スキル'+(ski+1), bg:C.freebg, fg:C.freetx, name:sk.n, nameBg:nbg, nameFg:nfg, nameBd:nbd});
             } else {
-              skList.push({label:'空き', bg:C.freebg, fg:C.freetx, name:'スキル未設定'});
+              // 未設定：バッジもUIと同じsk-free色、名前エリアはグレー点線風
+              skList.push({label:'スキル'+(ski+1), bg:C.freebg, fg:C.freetx, name:'ドロップ or クリック', nameBg:C.sur2, nameFg:C.tx3, nameBd:C.bd2});
             }
           }
           cy += 2;
@@ -2170,8 +2187,8 @@ function shareDiscord(){
             ctx.fillText(sk2.label, innerX+badgeW/2, cy+7);
             var nameX = innerX+badgeW+3;
             var nameW = innerW-badgeW-3;
-            roundRect(ctx, nameX, cy, nameW, 14, 3, '#f1f5f9');
-            ctx.fillStyle=C.tx2; ctx.font='9px "Noto Sans JP",sans-serif';
+            roundRect(ctx, nameX, cy, nameW, 14, 3, sk2.nameBg, sk2.nameBd);
+            ctx.fillStyle=sk2.nameFg; ctx.font='9px "Noto Sans JP",sans-serif';
             ctx.textAlign='left'; ctx.textBaseline='middle';
             ctx.fillText(clipText(ctx,sk2.name,nameW-6), nameX+4, cy+7);
             cy += 17;
@@ -2201,41 +2218,70 @@ function shareDiscord(){
       +d.getFullYear()+('0'+(d.getMonth()+1)).slice(-2)+('0'+d.getDate()).slice(-2)
       +'_'+('0'+d.getHours()).slice(-2)+('0'+d.getMinutes()).slice(-2)+'.png';
 
-    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-                || (navigator.maxTouchPoints > 1);
-
     function openInNewTab(dataUrl){
-      // 新しいタブで画像を開く（スマホで長押し保存 or PC右クリック保存）
+      // 新しいタブで画像を開く（iPhoneで長押し→写真に保存）
       var w = window.open('', '_blank');
       if(w){
+        var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        var msg = isIOS
+          ? '📱 画像を長押し →「写真に追加」をタップして保存できます'
+          : '📷 画像を長押し →「画像を保存」または右クリック→「名前を付けて保存」';
         w.document.write(
           '<!DOCTYPE html><html><head>'
           +'<meta charset="UTF-8">'
           +'<meta name="viewport" content="width=device-width,initial-scale=1">'
           +'<title>'+fname+'</title>'
           +'<style>'
-          +'body{margin:0;background:#111;display:flex;flex-direction:column;align-items:center;min-height:100vh;}'
-          +'img{max-width:100%;display:block;}'
-          +'.msg{color:#fff;font-family:sans-serif;font-size:14px;padding:16px;text-align:center;line-height:1.7;}'
+          +'*{box-sizing:border-box;margin:0;padding:0;}'
+          +'body{margin:0;background:#111;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:16px;}'
+          +'img{max-width:100%;display:block;border-radius:8px;}'
+          +'.msg{color:#fff;font-family:-apple-system,sans-serif;font-size:15px;padding:14px 20px;margin-bottom:16px;text-align:center;line-height:1.8;background:rgba(255,255,255,.12);border-radius:10px;width:100%;max-width:600px;}'
+          +'.msg b{color:#fbbf24;}'
           +'</style></head><body>'
-          +'<p class="msg">📷 画像を長押し →「写真に追加」または「画像を保存」で保存できます</p>'
+          +'<p class="msg">'+msg+'</p>'
           +'<img src="'+dataUrl+'" alt="部隊編成">'
           +'</body></html>'
         );
         w.document.close();
+      } else {
+        // ポップアップブロック時はdataURLをそのまま開く
+        location.href = dataUrl;
       }
     }
 
     canvas.toBlob(function(blob){
       if(!blob){ btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存'; return; }
 
-      // Web Share API対応スマホ（iOS Safari / Android Chrome等）
-      if(isMobile && navigator.share && navigator.canShare){
+      var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      var isMobile = isIOS || /Android/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+
+      // iOS Safari: Web Share APIでファイル共有（写真アプリへ保存可）
+      if(isIOS && navigator.share && navigator.canShare){
         var file = new File([blob], fname, {type:'image/png'});
         if(navigator.canShare({files:[file]})){
           navigator.share({files:[file], title:'ブラ天 部隊編成'})
+            .then(function(){
+              btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
+            })
             .catch(function(e){
               // キャンセルや失敗時は新タブにフォールバック
+              btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
+              if(e.name !== 'AbortError'){
+                var reader = new FileReader();
+                reader.onload = function(){ openInNewTab(reader.result); };
+                reader.readAsDataURL(blob);
+              }
+            });
+          return;
+        }
+      }
+
+      // Android: Web Share API
+      if(isMobile && navigator.share && navigator.canShare){
+        var file2 = new File([blob], fname, {type:'image/png'});
+        if(navigator.canShare({files:[file2]})){
+          navigator.share({files:[file2], title:'ブラ天 部隊編成'})
+            .catch(function(e){
               if(e.name !== 'AbortError'){
                 openInNewTab(URL.createObjectURL(blob));
               }
@@ -2245,13 +2291,13 @@ function shareDiscord(){
         }
       }
 
-      // スマホでWeb Share非対応 → 新しいタブで開く
+      // スマホでWeb Share非対応 → 新しいタブで画像を開く
       if(isMobile){
-        var reader = new FileReader();
-        reader.onload = function(){
-          openInNewTab(reader.result);
+        var reader2 = new FileReader();
+        reader2.onload = function(){
+          openInNewTab(reader2.result);
         };
-        reader.readAsDataURL(blob);
+        reader2.readAsDataURL(blob);
         btn.disabled=false; btn.textContent='📷 部隊編成を画像で保存';
         return;
       }
