@@ -12,7 +12,7 @@
   --tx:#18202e;--tx2:#58627a;--tx3:#96a0b5;
   --red:#c0392b;--grn:#16a34a;
   --wei:#2563eb;--wu:#dc2626;--shu:#16a34a;--oth:#7c3aed;
-  --s5c:#7c3aed;--s4c:#1d4ed8;--s3c:#374151;
+  --s5c:#d97706;--s4c:#e11d48;--s3c:#2563eb;
   --sh:0 1px 3px rgba(0,0,0,.07),0 3px 10px rgba(0,0,0,.05);
   --sh2:0 6px 24px rgba(0,0,0,.12),0 12px 40px rgba(0,0,0,.07);
   --r:10px;--rs:6px;
@@ -26,7 +26,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .logo-b{background:var(--red);color:#fff;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;flex-shrink:0;}
 .nav{display:flex;gap:2px;margin-left:6px;flex-shrink:0;}
 .nb{padding:6px 12px;border:none;border-radius:var(--rs);background:transparent;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);transition:all .15s;white-space:nowrap;}
-.nb.on{background:var(--red);color:#fff;box-shadow:0 2px 5px rgba(192,57,43,.3);}
+.nb.on{background:#64748b;color:#fff;box-shadow:0 2px 5px rgba(100,116,139,.3);}
 .nb:hover:not(.on){background:var(--bg);color:var(--tx);}
 @media(max-width:480px){
   .hd{padding:0 8px;gap:5px;}
@@ -57,7 +57,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chips{display:flex;gap:4px;flex-wrap:wrap;}
 .chip{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid var(--bd);background:var(--sur);cursor:pointer;color:var(--tx2);transition:all .12s;user-select:none;}
 .chip:hover{border-color:var(--red);color:var(--red);}
-.chip.on{background:var(--red);border-color:var(--red);color:#fff;}
+.chip.on{background:#64748b;border-color:#64748b;color:#fff;}
 .chip.wei.on{background:var(--wei);border-color:var(--wei);}
 .chip.wu.on{background:var(--wu);border-color:var(--wu);}
 .chip.shu.on{background:var(--shu);border-color:var(--shu);}
@@ -66,7 +66,10 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .chip.s4.on{background:var(--s4c);border-color:var(--s4c);}
 .chip.s3.on{background:var(--s3c);border-color:var(--s3c);}
 .chip.tc.on{background:#0f766e;border-color:#0f766e;color:#fff;}
-.chip.stt.on{background:#7c3aed;border-color:#7c3aed;color:#fff;}
+.chip.stt.on{background:#0891b2;border-color:#0891b2;color:#fff;}
+.chip.stt-start.on{background:#0891b2;border-color:#0891b2;color:#fff;}
+.chip.stt-active.on{background:#dc2626;border-color:#dc2626;color:#fff;}
+.chip.stt-passive.on{background:#d97706;border-color:#d97706;color:#fff;}
 
 /* ── CARD GRID ── */
 .cgrid{padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px;max-height:calc(100vh - 200px);min-height:200px;overflow-y:auto;}
@@ -278,9 +281,9 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 #share-preview .skrow{display:flex;gap:3px;align-items:center;}
 #share-preview .skbadge{font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;width:38px;text-align:center;box-sizing:border-box;line-height:1.5;}
 #share-preview .skbadge.fix{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
-#share-preview .skbadge.lv5{background:#7c3aed;color:#fff;}
-#share-preview .skbadge.lv4{background:#1d4ed8;color:#fff;}
-#share-preview .skbadge.lv3{background:#374151;color:#fff;}
+#share-preview .skbadge.lv5{background:#d97706;color:#fff;}
+#share-preview .skbadge.lv4{background:#e11d48;color:#fff;}
+#share-preview .skbadge.lv3{background:#2563eb;color:#fff;}
 #share-preview .skbadge.sk-free{background:#e0e7ff;color:#3730a3;border:1px solid #c7d2fe;}
 #share-preview .skbtn-txt{flex:1;padding:2px 5px;border-radius:4px;font-size:9px;font-weight:600;background:#f1f5f9;color:#58627a;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #share-preview .ftag{font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;color:#fff;}
@@ -305,11 +308,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 #share-preview .sq-troop-lbl{font-size:10px;font-weight:700;color:#96a0b5;}
 #share-preview .tbtn{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1.5px solid #cdd2dc;background:#fff;color:#58627a;}
 #share-preview .tbtn.on{color:#fff;border-color:transparent;}
-#share-preview .tbtn.on.t盾{background:#1d4ed8;}
-#share-preview .tbtn.on.t弓{background:#16a34a;}
-#share-preview .tbtn.on.t槍{background:#b45309;}
-#share-preview .tbtn.on.t兵{background:#374151;}
-#share-preview .tbtn.on.t騎{background:#7c3aed;}
+#share-preview .tbtn.on.t盾{background:#475569;}
+#share-preview .tbtn.on.t弓{background:#64748b;}
+#share-preview .tbtn.on.t槍{background:#374151;}
+#share-preview .tbtn.on.t兵{background:#6b7280;}
+#share-preview .tbtn.on.t騎{background:#94a3b8;}
 #share-preview .stat-row{display:flex;gap:4px;margin-top:4px;}
 #share-preview .stat-item{display:flex;gap:2px;align-items:center;background:#f1f5f9;border-radius:3px;padding:1px 4px;}
 #share-preview .stat-lbl{font-size:8px;color:#96a0b5;font-weight:700;}
@@ -348,11 +351,11 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .sq-troop-lbl{font-size:10px;font-weight:700;color:var(--tx3);white-space:nowrap;}
 .tbtn{padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;border:1.5px solid var(--bd);background:var(--sur);cursor:pointer;color:var(--tx2);transition:all .12s;line-height:1.5;}
 .tbtn:hover{border-color:#64748b;color:#334155;}
-.tbtn.on.t盾{background:#1d4ed8;border-color:#1d4ed8;color:#fff;box-shadow:0 2px 6px rgba(29,78,216,.35);}
-.tbtn.on.t弓{background:#b45309;border-color:#b45309;color:#fff;box-shadow:0 2px 6px rgba(180,83,9,.35);}
-.tbtn.on.t槍{background:#15803d;border-color:#15803d;color:#fff;box-shadow:0 2px 6px rgba(21,128,61,.35);}
-.tbtn.on.t兵{background:#dc2626;border-color:#dc2626;color:#fff;box-shadow:0 2px 6px rgba(220,38,38,.35);}
-.tbtn.on.t騎{background:#7c3aed;border-color:#7c3aed;color:#fff;box-shadow:0 2px 6px rgba(124,58,237,.35);}
+.tbtn.on.t盾{background:#475569;border-color:#475569;color:#fff;box-shadow:0 2px 6px rgba(71,85,105,.35);}
+.tbtn.on.t弓{background:#64748b;border-color:#64748b;color:#fff;box-shadow:0 2px 6px rgba(100,116,139,.35);}
+.tbtn.on.t槍{background:#374151;border-color:#374151;color:#fff;box-shadow:0 2px 6px rgba(55,65,81,.35);}
+.tbtn.on.t兵{background:#6b7280;border-color:#6b7280;color:#fff;box-shadow:0 2px 6px rgba(107,114,128,.35);}
+.tbtn.on.t騎{background:#94a3b8;border-color:#94a3b8;color:#fff;box-shadow:0 2px 6px rgba(148,163,184,.35);}
 
 /* 兵種適性ランク表示 */
 .troop-ranks{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;}
@@ -542,9 +545,9 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
               </div>
               <div class="chips" id="sdtchips">
                 <span class="chip on" onclick="fSDT('all',this)">全て</span>
-                <span class="chip stt" onclick="fSDT('start',this)">始動</span>
-                <span class="chip stt" onclick="fSDT('active',this)">アクティブ</span>
-                <span class="chip stt" onclick="fSDT('passive',this)">パッシブ</span>
+                <span class="chip stt stt-start" onclick="fSDT('start',this)">始動</span>
+                <span class="chip stt stt-active" onclick="fSDT('active',this)">アクティブ</span>
+                <span class="chip stt stt-passive" onclick="fSDT('passive',this)">パッシブ</span>
               </div>
             </div>
           </div>
