@@ -52,7 +52,7 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
 .panel-body.open{display:block;}
 .panel-body:not(.open) .cgrid{min-height:0;}
 .pt{font-size:13px;font-weight:700;flex-shrink:0;}
-.pc{font-size:11px;color:var(--tx3);margin-left:auto;}
+.pc{font-size:11px;color:var(--tx3);margin-left:6px;}
 
 /* ── CHIPS ── */
 .chips{display:flex;gap:4px;flex-wrap:wrap;}
@@ -487,15 +487,15 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
     <div class="panel">
       <div class="ph" onclick="togglePanel('ggrid-body')">
         <span class="pt">⚔️ 武将所持一覧</span>
-        <div class="chips" id="gchips">
-          <span class="chip on"  onclick="fG('all',this);event.stopPropagation()">全て</span>
-          <span class="chip wei" onclick="fG('魏',this);event.stopPropagation()">魏</span>
-          <span class="chip wu"  onclick="fG('呉',this);event.stopPropagation()">呉</span>
-          <span class="chip shu" onclick="fG('蜀',this);event.stopPropagation()">蜀</span>
-          <span class="chip oth" onclick="fG('他',this);event.stopPropagation()">他</span>
-        </div>
         <span class="pc" id="gcnt"></span>
         <span class="ph-toggle" id="ggrid-toggle">＋</span>
+        <div class="chips" id="gchips" style="width:100%;margin-top:4px;" onclick="event.stopPropagation()">
+          <span class="chip on"  onclick="fG('all',this)">全て</span>
+          <span class="chip wei" onclick="fG('魏',this)">魏</span>
+          <span class="chip wu"  onclick="fG('呉',this)">呉</span>
+          <span class="chip shu" onclick="fG('蜀',this)">蜀</span>
+          <span class="chip oth" onclick="fG('他',this)">他</span>
+        </div>
       </div>
       <div class="panel-body" id="ggrid-body">
         <div class="cgrid" id="ggrid"></div>
@@ -504,14 +504,14 @@ body{background:var(--bg);font-family:'Noto Sans JP',sans-serif;color:var(--tx);
     <div class="panel">
       <div class="ph" onclick="togglePanel('sgrid-body')">
         <span class="pt">📜 スキル所持一覧（スキル化済）</span>
-        <div class="chips" id="schips">
-          <span class="chip on" onclick="fS('all',this);event.stopPropagation()">全て</span>
-          <span class="chip s5" onclick="fS('5',this);event.stopPropagation()">★5</span>
-          <span class="chip s4" onclick="fS('4',this);event.stopPropagation()">★4</span>
-          <span class="chip s3" onclick="fS('3',this);event.stopPropagation()">★3</span>
-        </div>
         <span class="pc" id="scnt"></span>
         <span class="ph-toggle" id="sgrid-toggle">＋</span>
+        <div class="chips" id="schips" style="width:100%;margin-top:4px;" onclick="event.stopPropagation()">
+          <span class="chip on" onclick="fS('all',this)">全て</span>
+          <span class="chip s5" onclick="fS('5',this)">★5</span>
+          <span class="chip s4" onclick="fS('4',this)">★4</span>
+          <span class="chip s3" onclick="fS('3',this)">★3</span>
+        </div>
       </div>
       <div class="panel-body" id="sgrid-body">
         <div class="cgrid" id="sgrid"></div>
