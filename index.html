@@ -1432,7 +1432,7 @@ function setSk3tBonusVal(id, stat, val){
   var cur = ownedG[id];
   if(typeof cur !== 'object') cur = {aw:0,en:0};
   if(!cur.sk3tBonus) cur.sk3tBonus = {武:0,防:0,計:0,速:0};
-  cur.sk3tBonus[stat] = Math.max(0, parseInt(val,10)||0);
+  cur.sk3tBonus[stat] = parseInt(val,10)||0;
   ownedG[id] = cur;
   saveState();
   var el = document.getElementById('sk3t-'+id+'-'+stat);
@@ -1451,7 +1451,7 @@ function setSk1tBonusVal(id, stat, val){
   var cur = ownedG[id];
   if(typeof cur !== 'object') cur = {aw:0,en:0};
   if(!cur.sk1tBonus) cur.sk1tBonus = {武:0,防:0,計:0,速:0};
-  cur.sk1tBonus[stat] = Math.max(0, parseInt(val,10)||0);
+  cur.sk1tBonus[stat] = parseInt(val,10)||0;
   ownedG[id] = cur;
   saveState();
   var el = document.getElementById('sk1t-'+id+'-'+stat);
@@ -1810,6 +1810,13 @@ function rtag(r){ var d=r==='Sp'?'S+':r; return '<span class="rtag r'+r+'">'+d+'
 ================================================================ */
 var CHANGELOG = [
   {
+    ver: 'v1.2', date: '2026-03-29',
+    items: [
+      {type:'change',text:'装備スキル補正値（武器・防具・乗物・装飾品）にマイナス値を設定できるように変更。'},
+      {type:'change',text:'1Tスキル調整・3Tスキル調整・8Tスキル調整にマイナス値を設定できるように変更。'},
+    ]
+  },
+  {
     ver: 'v1.1', date: '2026-03-28',
     items: [
       {type:'new',  text:'趙雲を追加。'},
@@ -1817,7 +1824,6 @@ var CHANGELOG = [
       {type:'new',  text:'強化設定に「1Tスキル調整（専用スキル）」入力欄を追加。1Tのみ発動するバフ値を個別設定できるように。'},
       {type:'change',text:'強化設定の「通常スキル（装備）」を「3Tスキル調整」に変更。装備数選択から合計値直接入力方式へ。'},
       {type:'change',text:'強化設定の「専用スキル選択」を「8Tスキル調整」に変更。プリセット選択から合計値直接入力方式へ。'},
-      {type:'change',text:'スキル発動後能力値のボタン表記を「1T〜3T」→「2T〜3T」に変更。'},
     ]
   }
 ];
@@ -2296,7 +2302,7 @@ function openUpgradeModal(id){
   STATS.forEach(function(s){
     html += '<div style="display:flex;align-items:center;gap:4px;">'
           + '<span style="font-size:12px;font-weight:700;color:var(--tx2);">'+s+'</span>'
-          + '<input id="sk3t-'+id+'-'+s+'" type="number" min="0" value="'+(sk3tBonus[s]||0)+'"'
+          + '<input id="sk3t-'+id+'-'+s+'" type="number" value="'+(sk3tBonus[s]||0)+'"'
           + ' style="width:48px;padding:3px 4px;border:1.5px solid var(--bd2);border-radius:6px;font-size:12px;font-weight:700;font-family:\'Noto Sans JP\',sans-serif;text-align:right;background:#fff;"'
           + ' oninput="setSk3tBonusVal(\''+id+'\',\''+s+'\',this.value)">'
           + '</div>';
@@ -2312,7 +2318,7 @@ function openUpgradeModal(id){
   STATS.forEach(function(s){
     html += '<div style="display:flex;align-items:center;gap:4px;">'
           + '<span style="font-size:12px;font-weight:700;color:var(--tx2);">'+s+'</span>'
-          + '<input id="dedsk-'+id+'-'+s+'" type="number" min="0" value="'+(dedSkBonus2[s]||0)+'"'
+          + '<input id="dedsk-'+id+'-'+s+'" type="number" value="'+(dedSkBonus2[s]||0)+'"'
           + ' style="width:48px;padding:3px 4px;border:1.5px solid var(--bd2);border-radius:6px;font-size:12px;font-weight:700;font-family:\'Noto Sans JP\',sans-serif;text-align:right;background:#fff;"'
           + ' oninput="setDedSkBonusVal(\''+id+'\',\''+s+'\',this.value)">'
           + '</div>';
@@ -2328,7 +2334,7 @@ function openUpgradeModal(id){
   STATS.forEach(function(s){
     html += '<div style="display:flex;align-items:center;gap:4px;">'
           + '<span style="font-size:12px;font-weight:700;color:var(--tx2);">'+s+'</span>'
-          + '<input id="sk1t-'+id+'-'+s+'" type="number" min="0" value="'+(sk1tBonus[s]||0)+'"'
+          + '<input id="sk1t-'+id+'-'+s+'" type="number" value="'+(sk1tBonus[s]||0)+'"'
           + ' style="width:48px;padding:3px 4px;border:1.5px solid var(--bd2);border-radius:6px;font-size:12px;font-weight:700;font-family:\'Noto Sans JP\',sans-serif;text-align:right;background:#fff;"'
           + ' oninput="setSk1tBonusVal(\''+id+'\',\''+s+'\',this.value)">'
           + '</div>';
@@ -2428,7 +2434,7 @@ function setDedSkBonusVal(id, stat, val){
   var cur = ownedG[id];
   if(typeof cur !== 'object') cur = {aw:0,en:[]};
   if(!cur.dedSkBonus || Array.isArray(cur.dedSkBonus)) cur.dedSkBonus = {武:0,防:0,計:0,速:0};
-  cur.dedSkBonus[stat] = Math.max(0, parseInt(val,10)||0);
+  cur.dedSkBonus[stat] = parseInt(val,10)||0;
   ownedG[id] = cur;
   saveState();
   var el = document.getElementById('dedsk-'+id+'-'+stat);
@@ -2526,7 +2532,7 @@ function setEquipKind(id, kind, stat, val){
   if(typeof cur !== 'object') cur = {aw:0,en:0};
   if(!cur.equip) cur.equip = {};
   EQUIP_KINDS.forEach(function(k){ if(!cur.equip[k]) cur.equip[k] = {武:0,防:0,計:0,速:0}; });
-  cur.equip[kind][stat] = Math.round(Math.min(999.99, Math.max(0, parseFloat(val)||0)) * 100) / 100;
+  cur.equip[kind][stat] = Math.round(Math.min(999.99, Math.max(-999.99, parseFloat(val)||0)) * 100) / 100;
   ownedG[id] = cur;
   saveState();
   // 入力欄更新
