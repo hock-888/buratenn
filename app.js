@@ -1056,6 +1056,12 @@ function rtag(r){ var d=r==='Sp'?'S+':r; return '<span class="rtag r'+r+'">'+d+'
 ================================================================ */
 var CHANGELOG = [
   {
+    ver: 'v1.5', date: '2026-05-08',
+    items: [
+      {type:'change',  text:'内部処理修正。'},
+    ]
+  },
+  {
     ver: 'v1.4', date: '2026-04-25',
     items: [
       {type:'new',  text:'馬超を追加。'},
