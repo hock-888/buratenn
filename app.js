@@ -665,8 +665,8 @@ function getAw(id){ var v=ownedG[id]; if(!v) return 0; return typeof v==='object
 // 兵種適性ランク（覚醒+3以上は awTroop の兵種が更新される）
 function troopRank(g, t){ if(!g||!g.troops) return undefined; var r=g.troops[t]; if(g.awTroop && g.awTroop[t] && getAw(g.id)>=3) return g.awTroop[t]; return r; }
 // ── 覚醒効果 ──
-// スキルPT=覚醒LV×10 / +1: 自由割り振り10 / +2: 最高能力+10 / +3: 兵種適性更新(awTroop) / +4・+5: 全能力+5
-function awFreeMax(aw){ return aw>0 ? 10 : 0; }
+// スキルPT=覚醒LV×10 / 自由割り振り=覚醒LV×10（+1:10〜+5:50） / +2: 最高能力+10 / +3: 兵種適性更新(awTroop) / +4・+5: 全能力+5
+function awFreeMax(aw){ return aw>0 ? aw*10 : 0; } // 覚醒LV×10
 function awSkillPt(aw){ return aw>0 ? aw*10 : 0; } // 覚醒LV×10
 // 覚醒+3時の適性兵種タグ（Lvの右隣に表示）。覚醒+3未満は淡色、+3以上は強調
 function awTroopTag(g){
@@ -1141,7 +1141,8 @@ var CHANGELOG = [
       {type:'new',  text:'賈詡・徐晃・荀攸・張角娘・王桃・海辺王悦・海辺周姫を追加。'},
       {type:'new',  text:'スキル化スキル8種（三乱鬼謀・燃心三乱撃・計略弱化の鬼謀・上昇除去の強撃・計略強化の鬼謀・混乱鬼謀・低下解除回復・襲混乱の鬼謀）を追加。'},
       {type:'change', text:'双回復・伍（効力120）、襲麻痺の鬼謀・伍（240/250）、回復・伍（効力240）の数値を最新に更新。'},
-      {type:'change', text:'覚醒効果を変更: スキルPT=覚醒LV×10 / +1=自由割り振り10 / +2=最高能力+10 / +3=兵種適性更新 / +4,+5=全能力+5。'},
+      {type:'change', text:'覚醒の自由割り振りポイントが覚醒+2〜+5で増えない不具合を修正（上限=覚醒LV×10: +1=10〜+5=50）。'},
+      {type:'change', text:'覚醒効果を変更: スキルPT=覚醒LV×10 / 自由割り振り=覚醒LV×10 / +2=最高能力+10 / +3=兵種適性更新 / +4,+5=全能力+5。'},
       {type:'new',  text:'所持一覧・部隊編成のLv右隣に覚醒+3時の適性兵種（例: 覚弓S）を表示。'},
       {type:'change', text:'「武力弱化の強撃」「防御弱化の強撃」の表記を「・伍」に統一。'},
     ]
